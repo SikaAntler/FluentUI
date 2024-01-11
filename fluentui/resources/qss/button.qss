@@ -1,0 +1,18 @@
+FToolButton {
+    background-color: transparent;
+    border: none;
+    border-radius: 5px;
+    /*padding: 5px 9px 6px 8px;*/
+}
+
+FToolButton:hover {
+    background-color: rgba(0, 0, 0, 9);
+}
+
+FToolButton:pressed {
+    background-color: rgba(0, 0, 0, 6);
+}
+
+FToolButton:disabled {
+    background-color: transparent;
+}

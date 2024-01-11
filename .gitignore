@@ -1,0 +1,19 @@
+# MacOS
+.DS_Store
+
+# Project
+/PyQt-Fluent-Widgets-PySide6.zip
+/PyQt-Fluent-Widgets-PySide6/
+
+# PyCharm
+/.idea/
+
+# Python
+/venv/
+__pycache/
+
+# Qt
+*_rc.py
+
+# VSCode
+/.vscode/

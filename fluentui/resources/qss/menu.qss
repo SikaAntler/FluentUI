@@ -1,0 +1,21 @@
+MenuActionListWidget {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 9px;
+    background-color: rgb(249, 249, 249);
+    outline: none;
+    font-size: 14px;
+}
+
+MenuActionListWidget::item {
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+    margin-left: 6px;
+    margin-right: 6px;
+    border: none;
+    color: black
+}
+
+MenuActionListWidget::item:hover {
+    background-color: rgba(0, 0, 0, 9);
+}

@@ -1,0 +1,35 @@
+<RCC>
+    <qresource prefix="/fluentui/">
+        <file alias="add">icons/ic_fluent_add_24_regular.svg</file>
+        <file alias="add_circle">icons/ic_fluent_add_circle_24_regular.svg</file>
+        <file alias="add_square">icons/ic_fluent_add_square_24_regular.svg</file>
+        <file alias="arrow_circle_down">icons/ic_fluent_arrow_circle_down_24_regular.svg</file>
+        <file alias="arrow_circle_up">icons/ic_fluent_arrow_circle_up_24_regular.svg</file>
+        <file alias="center_horizontal">icons/ic_fluent_center_horizontal_24_regular.svg</file>
+        <file alias="delete">icons/ic_fluent_delete_24_regular.svg</file>
+        <file alias="edit">icons/ic_fluent_edit_24_regular.svg</file>
+        <file alias="folder">icons/ic_fluent_folder_24_regular.svg</file>
+        <file alias="folder_open">icons/ic_fluent_folder_open_24_regular.svg</file>
+        <file alias="group_list">icons/ic_fluent_group_list_24_regular.svg</file>
+        <file alias="home">icons/ic_fluent_home_24_regular.svg</file>
+        <file alias="image">icons/ic_fluent_image_24_regular.svg</file>
+        <file alias="image_multiple">icons/ic_fluent_image_multiple_24_regular.svg</file>
+        <file alias="line_horizontal_3">icons/ic_fluent_line_horizontal_3_20_filled.svg</file>
+        <file alias="open_folder">icons/ic_fluent_open_folder_24_regular.svg</file>
+        <file alias="rename">icons/ic_fluent_rename_24_regular.svg</file>
+        <file alias="save">icons/ic_fluent_save_24_regular.svg</file>
+        <file alias="scale_fit">icons/ic_fluent_scale_fit_24_regular.svg</file>
+        <file alias="search">icons/ic_fluent_search_24_regular.svg</file>
+        <file alias="settings">icons/ic_fluent_settings_24_regular.svg</file>
+        <file alias="square">icons/ic_fluent_square_24_regular.svg</file>
+        <file alias="zoom_fit">icons/ic_fluent_zoom_fit_24_regular.svg</file>
+        <file alias="zoom_in">icons/ic_fluent_zoom_in_24_regular.svg</file>
+        <file alias="zoom_out">icons/ic_fluent_zoom_out_24_regular.svg</file>
+
+        <file>qss/button.qss</file>
+        <!--        <file>qss/group_box.qss</file>-->
+        <!--        <file>qss/list_widget.qss</file>-->
+        <file>qss/menu.qss</file>
+        <!--        <file>qss/window.qss</file>-->
+    </qresource>
+</RCC>
