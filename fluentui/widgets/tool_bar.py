@@ -1,5 +1,5 @@
 from PySide6.QtCore import QRect, QSize, Qt
-from PySide6.QtGui import QAction, QColor, QPainter, QPaintEvent
+from PySide6.QtGui import QAction, QColor, QPainter, QPaintEvent, QMouseEvent
 from PySide6.QtWidgets import QFrame, QWidget
 
 from ..utils import set_font
@@ -13,13 +13,29 @@ class FToolButton(ToolButton):
         self.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonIconOnly)
 
         self._action = None
+        self._is_pressed = False
         self._is_tight = False
 
-    def set_action(self, action: QAction) -> None:
+    def isTight(self) -> bool:
+        return self._is_tight
+
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        self._is_pressed = True
+        super().mousePressEvent(event)
+
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
+        self._is_pressed = False
+        super().mouseReleaseEvent(event)
+
+    def setAction(self, action: QAction) -> None:
         self._action = action
         self.clicked.connect(action.trigger)
         action.changed.connect(self._on_action_changed)
         action.toggled.connect(self._on_action_toggled)
+
+    def setTight(self, is_tight: bool) -> None:
+        self._is_tight = is_tight
+        self.update()
 
     def _on_action_changed(self) -> None:
         self.setIcon(self._action.icon())
@@ -29,13 +45,6 @@ class FToolButton(ToolButton):
     def _on_action_toggled(self, is_checked: bool) -> None:
         self.setChecked(True)
         self.setChecked(is_checked)
-
-    def set_tight(self, is_tight: bool) -> None:
-        self._is_tight = is_tight
-        self.update()
-
-    def is_tight(self) -> bool:
-        return self._is_tight
 
     def _is_icon_only(self) -> bool:
         return self.toolButtonStyle() in [
@@ -67,6 +76,11 @@ class FToolButton(ToolButton):
             | QPainter.RenderHint.TextAntialiasing
             | QPainter.RenderHint.SmoothPixmapTransform
         )
+
+        if not self.isEnabled():
+            painter.setOpacity(0.43)
+        elif self._is_pressed:
+            painter.setOpacity(0.63)
 
         style = self.toolButtonStyle()
         iw, ih = self.iconSize().width(), self.iconSize().height()
@@ -110,7 +124,7 @@ class FToolBar(QFrame):
         self._icon_size = QSize(24, 24)  # 原代码是16，但svg图片不同，这里用16显得有些小
         self._spacing = 4
 
-        set_font(self, font_size=12)
+        # set_font(self, font_size=12)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
     def addAction(self, action: QAction) -> None:
@@ -128,9 +142,9 @@ class FToolBar(QFrame):
         button = FToolButton()
         button.setIcon(action.icon())
         button.setText(action.text())
-        button.set_action(action)
+        button.setAction(action)
         button.setToolButtonStyle(self._tool_button_style)
-        button.set_tight(self._is_button_tight)
+        button.setTight(self._is_button_tight)
         button.setIconSize(self._icon_size)
         button.setFont(self.font())
 

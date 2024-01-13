@@ -1,10 +1,6 @@
 # MacOS
 .DS_Store
 
-# Project
-/PyQt-Fluent-Widgets-PySide6.zip
-/PyQt-Fluent-Widgets-PySide6/
-
 # PyCharm
 /.idea/
 

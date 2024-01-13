@@ -20,6 +20,8 @@ class MainWindow(QMainWindow):
 
         self.widget_central = QWidget()
         self.glyt_main = QGridLayout(self.widget_central)
+        self.glyt_main.setContentsMargins(8, 0, 8, 8)
+        self.glyt_main.setSpacing(8)
         self.setCentralWidget(self.widget_central)
 
         # self.tool_bar = QToolBar()
@@ -40,6 +42,8 @@ class MainWindow(QMainWindow):
 
         self.action_next = QAction(FluentIcon.ARROW_CIRCLE_DOWN.icon(), "下一个")
         self.tool_bar.addAction(self.action_next)
+
+        self.glyt_main.addWidget(QWidget())
 
 
 if __name__ == "__main__":
