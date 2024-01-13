@@ -146,7 +146,7 @@ class FToolBar(QFrame):
         button.setToolButtonStyle(self._tool_button_style)
         button.setTight(self._is_button_tight)
         button.setIconSize(self._icon_size)
-        button.setFont(self.font())
+        button.setFont(self.font())  # TODO: 是否可以放在FToolButton类里
 
         return button
 
