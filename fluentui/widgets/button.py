@@ -61,7 +61,6 @@ class FPushButton(QPushButton):
             painter = QPainter(self)
             painter.setRenderHints(
                 QPainter.RenderHint.Antialiasing
-                | QPainter.RenderHint.TextAntialiasing
                 | QPainter.RenderHint.SmoothPixmapTransform,
             )
 
