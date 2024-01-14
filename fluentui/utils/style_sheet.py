@@ -25,6 +25,7 @@ class FluentStyleSheet(StyleSheet, Enum):
     GROUP_BOX = "group_box"
     LIST_WIDGET = "list_widget"
     MENU = "menu"
+    RADIO_BUTTON = "radio_button"
     WINDOW = "window"
 
     def path(self) -> str:

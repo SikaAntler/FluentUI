@@ -1,0 +1,84 @@
+FRadioButton {
+    width: 24px;
+    height: 24px;
+    background-color: transparent;
+    color: black;
+}
+
+FRadioButton::indicator {
+    width: 18px;
+    height: 18px;
+    border-radius: 11px;
+    border: 2px solid rgb(153, 153, 153);
+    background-color: rgba(0, 0, 0, 5);
+    margin-right: 4px;
+}
+
+FRadioButton::indicator:hover {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+FRadioButton::indicator:pressed {
+    border: 2px solid rgb(187, 187, 187);
+    background-color: qradialgradient(
+        spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5,
+        stop:0 rgb(255, 255, 255),
+        stop:0.5 rgb(255, 255, 255),
+        stop:0.6 rgb(225, 224, 223),
+        stop:1 rgb(255, 224, 223)
+    );
+}
+
+FRadioButton::indicator:checked {
+    height: 22px;
+    width: 22px;
+    border: none;
+    border-radius: 11px;
+    background-color: qradialgradient(
+        spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5,
+        stop:0 rgb(255, 255, 255),
+        stop:0.5 rgb(255, 255, 255),
+        stop:0.6 rgb(0, 159, 170),
+        stop:1 rgb(0, 159, 170)
+    );
+}
+
+FRadioButton::indicator:checked:hover {
+    background-color: qradialgradient(
+        spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5,
+        stop:0 rgb(255, 255, 255),
+        stop:0.6 rgb(255, 255, 255),
+        stop:0.7 rgb(0, 159, 170),
+        stop:1 rgb(0, 159, 170)
+    );
+}
+
+FRadioButton::indicator:checked:pressed {
+    background-color: qradialgradient(
+        spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5,
+        stop:0 rgb(255, 255, 255),
+        stop:0.5 rgb(255, 255, 255),
+        stop:0.6 rgb(0, 159, 170),
+        stop:1 rgb(0, 159, 170)
+    );
+}
+
+RadioButton:disabled {
+    color: rgba(0, 0, 0, 110);
+}
+
+RadioButton::indicator:disabled {
+    border: 2px solid rgb(187, 187, 187);
+    background-color: transparent;
+}
+
+RadioButton::indicator:disabled:checked {
+    border: none;
+    background-color: qradialgradient(
+        spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5,
+        stop:0 rgb(255, 255, 255),
+        stop:0.5 rgb(255, 255, 255),
+        stop:0.6 rgba(0, 0, 0, 0.2169),
+        stop:1 rgba(0, 0, 0, 0.2169)
+    );
+}

@@ -153,7 +153,7 @@ class FSwitchButton(QWidget):
                 self.hlyt.addWidget(self._label, 0)
                 self.hlyt.setAlignment(Qt.AlignmentFlag.AlignRight)
 
-        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground)
+        # self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground)
         self.setFixedHeight(22)
         set_font(self, font_size=12)
 

@@ -31,5 +31,6 @@
         <!--        <file>qss/list_widget.qss</file>-->
         <file>qss/menu.qss</file>
         <!--        <file>qss/window.qss</file>-->
+        <file>qss/radio_button.qss</file>
     </qresource>
 </RCC>
