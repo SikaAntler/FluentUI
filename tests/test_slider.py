@@ -30,7 +30,6 @@ class MainWindow(QMainWindow):
         self.glyt_main.addWidget(self.v_fslider, 1, 0)
 
         self.h_fslider = FSlider(Qt.Orientation.Horizontal)
-        print(self.h_fslider.minimum(), self.h_fslider.maximum())
         self.glyt_main.addWidget(self.h_fslider, 1, 1)
 
 

@@ -17,6 +17,8 @@ from PySide6.QtGui import (
 )
 from PySide6.QtWidgets import QSlider, QWidget
 
+from ..utils import ThemeColor
+
 
 class SliderHandle(QWidget):
     pressed = Signal()
@@ -55,7 +57,7 @@ class SliderHandle(QWidget):
         painter.drawEllipse(self.rect().adjusted(1, 1, -1, -1))
 
         # 内圈
-        painter.setBrush(QColor(0, 159, 170))
+        painter.setBrush(ThemeColor.PRIMARY.color())
         painter.drawEllipse(QPoint(11, 11), self._radius, self._radius)
 
     @Property(int)
@@ -106,7 +108,7 @@ class FSlider(QSlider):
             w = self.width()
             painter.drawRoundedRect(11, 11 - 2, w - 22, 4, 2, 2)
 
-            painter.setBrush(QColor(0, 159, 170))
+            painter.setBrush(ThemeColor.PRIMARY.color())
             aw = int(
                 (self.value() - self.minimum())
                 / (self.maximum() - self.minimum())
@@ -117,7 +119,7 @@ class FSlider(QSlider):
             h = self.height()
             painter.drawRoundedRect(11 - 2, 11, 4, h - 22, 2, 2)
 
-            painter.setBrush(QColor(0, 159, 170))
+            painter.setBrush(ThemeColor.PRIMARY.color())
             ah = int(
                 (self.value() - self.minimum())
                 / (self.maximum() - self.minimum())
