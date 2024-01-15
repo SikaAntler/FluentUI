@@ -2,6 +2,7 @@ from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QIcon, QMouseEvent
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QWidget
 
+from ...utils import set_font
 from .title_bar_buttons import (
     CloseButton,
     MaximizeButton,
@@ -88,6 +89,8 @@ class TitleBar(QWidget):
         self.btn_minimize.clicked.connect(self.window().showMinimized)
         self.btn_maximize.clicked.connect(self.on_btn_maximize_clicked)
         self.btn_close.clicked.connect(self.window().close)
+
+        set_font(self)
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
         # 原代码里分别在utils和window_effect中实现了，但usage只有前者

@@ -6,7 +6,7 @@
 
 # Python
 /venv/
-__pycache/
+__pycache__/
 
 # Qt
 *_rc.py

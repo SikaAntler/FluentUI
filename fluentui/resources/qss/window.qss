@@ -1,0 +1,7 @@
+FMainWindow {
+    background-color: rgb(243, 243, 243);
+}
+
+TitleBar {
+    background-color: transparent;
+}

@@ -4,7 +4,15 @@
         <file alias="add_circle">icons/ic_fluent_add_circle_24_regular.svg</file>
         <file alias="add_square">icons/ic_fluent_add_square_24_regular.svg</file>
         <file alias="arrow_circle_down">icons/ic_fluent_arrow_circle_down_24_regular.svg</file>
+        <file alias="arrow_circle_left">icons/ic_fluent_arrow_circle_left_24_regular.svg</file>
+        <file alias="arrow_circle_right">icons/ic_fluent_arrow_circle_right_24_regular.svg</file>
         <file alias="arrow_circle_up">icons/ic_fluent_arrow_circle_up_24_regular.svg</file>
+        <file alias="camera">icons/ic_fluent_camera_24_regular.svg</file>
+        <file alias="camera_edit">icons/ic_fluent_camera_edit_20_regular.svg</file>
+        <file alias="arrow_down">icons/ic_fluent_arrow_down_24_regular.svg</file>
+        <file alias="arrow_left">icons/ic_fluent_arrow_left_24_regular.svg</file>
+        <file alias="arrow_right">icons/ic_fluent_arrow_right_24_regular.svg</file>
+        <file alias="arrow_up">icons/ic_fluent_arrow_up_24_regular.svg</file>
         <file alias="center_horizontal">icons/ic_fluent_center_horizontal_24_regular.svg</file>
         <file alias="delete">icons/ic_fluent_delete_24_regular.svg</file>
         <file alias="edit">icons/ic_fluent_edit_24_regular.svg</file>
@@ -19,6 +27,7 @@
         <file alias="rename">icons/ic_fluent_rename_24_regular.svg</file>
         <file alias="save">icons/ic_fluent_save_24_regular.svg</file>
         <file alias="scale_fit">icons/ic_fluent_scale_fit_24_regular.svg</file>
+        <file alias="scan_camera">icons/ic_fluent_scan_camera_24_regular.svg</file>
         <file alias="search">icons/ic_fluent_search_24_regular.svg</file>
         <file alias="settings">icons/ic_fluent_settings_24_regular.svg</file>
         <file alias="square">icons/ic_fluent_square_24_regular.svg</file>
@@ -30,7 +39,7 @@
         <!--        <file>qss/group_box.qss</file>-->
         <!--        <file>qss/list_widget.qss</file>-->
         <file>qss/menu.qss</file>
-        <!--        <file>qss/window.qss</file>-->
         <file>qss/radio_button.qss</file>
+        <file>qss/window.qss</file>
     </qresource>
 </RCC>

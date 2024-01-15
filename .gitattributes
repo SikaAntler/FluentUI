@@ -1,0 +1,7 @@
+* text=auto
+
+*.py text
+*.qss text
+*.qrc text
+
+*.svg binary

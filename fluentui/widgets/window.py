@@ -2,6 +2,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QMainWindow
 
 from ..framesless import FramelessHelper
+from ..utils import FluentStyleSheet
 
 
 class FMainWindow(FramelessHelper, QMainWindow):
@@ -11,3 +12,5 @@ class FMainWindow(FramelessHelper, QMainWindow):
         self._set_window_flags(Qt.WindowType.Window)
 
         self.setMenuWidget(self.title_bar)
+
+        FluentStyleSheet.WINDOW.apply(self)
