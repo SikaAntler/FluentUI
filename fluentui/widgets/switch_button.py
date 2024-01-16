@@ -140,10 +140,10 @@ class FSwitchButton(QWidget):
         self._text_on = "开"
         self._label = QLabel(self._text_off)
 
+        self.hlyt = QHBoxLayout(self)
+        self.hlyt.setContentsMargins(0, 0, 0, 0)
+        self.hlyt.setSpacing(12)
         if indicator_pos != IndicatorPosition.CENTER:
-            self.hlyt = QHBoxLayout(self)
-            self.hlyt.setContentsMargins(0, 0, 0, 0)
-            self.hlyt.setSpacing(12)
             if indicator_pos == IndicatorPosition.LEFT:
                 self.hlyt.addWidget(self._indicator, 0)
                 self.hlyt.addWidget(self._label, 0)
@@ -152,6 +152,9 @@ class FSwitchButton(QWidget):
                 self.hlyt.addWidget(self._indicator, 0)
                 self.hlyt.addWidget(self._label, 0)
                 self.hlyt.setAlignment(Qt.AlignmentFlag.AlignRight)
+        else:
+            self.hlyt.addWidget(self._indicator)
+            self.hlyt.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground)
         self.setFixedHeight(22)

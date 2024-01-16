@@ -1,4 +1,4 @@
-FMainWindow {
+FMainWindow, FWidget {
     background-color: rgb(243, 243, 243);
 }
 

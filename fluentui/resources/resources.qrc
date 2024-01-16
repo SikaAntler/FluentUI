@@ -7,12 +7,13 @@
         <file alias="arrow_circle_left">icons/ic_fluent_arrow_circle_left_24_regular.svg</file>
         <file alias="arrow_circle_right">icons/ic_fluent_arrow_circle_right_24_regular.svg</file>
         <file alias="arrow_circle_up">icons/ic_fluent_arrow_circle_up_24_regular.svg</file>
-        <file alias="camera">icons/ic_fluent_camera_24_regular.svg</file>
-        <file alias="camera_edit">icons/ic_fluent_camera_edit_20_regular.svg</file>
         <file alias="arrow_down">icons/ic_fluent_arrow_down_24_regular.svg</file>
         <file alias="arrow_left">icons/ic_fluent_arrow_left_24_regular.svg</file>
         <file alias="arrow_right">icons/ic_fluent_arrow_right_24_regular.svg</file>
         <file alias="arrow_up">icons/ic_fluent_arrow_up_24_regular.svg</file>
+        <file alias="camera">icons/ic_fluent_camera_24_regular.svg</file>
+        <file alias="camera_edit">icons/ic_fluent_camera_edit_20_regular.svg</file>
+        <file alias="camera_off">icons/ic_fluent_camera_off_24_regular.svg</file>
         <file alias="center_horizontal">icons/ic_fluent_center_horizontal_24_regular.svg</file>
         <file alias="delete">icons/ic_fluent_delete_24_regular.svg</file>
         <file alias="edit">icons/ic_fluent_edit_24_regular.svg</file>

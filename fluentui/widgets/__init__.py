@@ -5,4 +5,5 @@ from .radio_button import FRadioButton
 from .slider import FSlider
 from .switch_button import FSwitchButton, IndicatorPosition
 from .tool_bar import FToolBar
+from .widget import FWidget
 from .window import FMainWindow
