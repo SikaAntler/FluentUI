@@ -90,7 +90,8 @@ class TitleBar(QWidget):
         self.btn_maximize.clicked.connect(self.on_btn_maximize_clicked)
         self.btn_close.clicked.connect(self.window().close)
 
-        set_font(self)
+        # set_font(self)  # 只给self设置字体，子控件不会继承效果
+        set_font(self.title)
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
         # 原代码里分别在utils和window_effect中实现了，但usage只有前者
