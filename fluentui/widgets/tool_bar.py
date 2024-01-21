@@ -14,8 +14,7 @@ class FToolButton(ToggleToolButton):
         action.setCheckable(True)
         action.changed.connect(self._on_action_changed)
         # 点击此button时同时改变action状态
-        self.clicked.connect(action.toggled)
-        # TODO: button点击后确会让action发出toggled信号，但此时action的isChecked并不会立即更新
+        self.clicked.connect(action.toggle)
         self._action = action
         self._is_tight = False
 
