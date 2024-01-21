@@ -126,12 +126,3 @@ class ToolButton(QToolButton):
 
     def _post_init(self) -> None:
         pass
-
-
-class ToggleToolButton(ToolButton):
-    def __init__(self, icon: FIcon, text: str, parent=None) -> None:
-        super().__init__(icon=icon, text=text, parent=parent)
-
-    def _post_init(self) -> None:
-        self.setCheckable(True)
-        self.setChecked(False)

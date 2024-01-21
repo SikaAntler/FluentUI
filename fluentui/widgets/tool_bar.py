@@ -3,19 +3,18 @@ from PySide6.QtGui import QColor, QIcon, QPainter, QPaintEvent
 from PySide6.QtWidgets import QWidget
 
 from ..utils import FAction, draw_icon, set_font
-from .button import ToggleToolButton
+from .button import ToolButton
 
 
-class FToolButton(ToggleToolButton):
+class FToolButton(ToolButton):
     def __init__(self, action: FAction, parent=None) -> None:
         super().__init__(icon=action.icon(), text=action.text(), parent=parent)
 
-        # action需要设置checkable，否则isChecked始终返回False
-        action.setCheckable(True)
+        self._action = action
+        self._on_action_changed()
         action.changed.connect(self._on_action_changed)
         # 点击此button时同时改变action状态
         self.clicked.connect(action.toggle)
-        self._action = action
         self._is_tight = False
 
     def action(self) -> FAction:
@@ -105,7 +104,7 @@ class FToolButton(ToggleToolButton):
         self.setText(self._action.text())
         self.setToolTip(self._action.toolTip())
 
-        # 且ToogleToolButton强制checkable，因此action的setCheckable不会同步到这里
+        self.setCheckable(self._action.isCheckable())
         self.setChecked(self._action.isChecked())
         self.setEnabled(self._action.isEnabled())
 

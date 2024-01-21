@@ -35,20 +35,20 @@ ToolButton {
     padding: 5px 9px 6px 8px;
 }
 
-ToggleToolButton:checked {
+ToolButton:checked {
     color: white;
     background-color: rgb(0, 159, 170);
     border: 1px solid rgb(0, 167, 179);
     border-bottom: 1px solid rgb(0, 119, 128);
 }
 
-ToggleToolButton:checked:hover {
+ToolButton:checked:hover {
     background-color: rgb(0, 167, 179);
     border: 1px solid rgb(45, 170, 179);
     border-bottom: 1px solid rgb(0, 119, 128);
 }
 
-ToggleToolButton:checked:pressed {
+ToolButton:checked:pressed {
     color: rgba(255, 255, 255, 0.63);
     background-color: rgb(62, 171, 179);
     border: 1px solid rgb(62, 171, 179);

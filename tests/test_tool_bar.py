@@ -28,14 +28,16 @@ class MainWindow(QMainWindow):
         self.glyt_main.addWidget(self.tool_bar, 0, 0)
 
         self.action_image = FAction(FIcon.IMAGE, "图像")
+        self.action_image.setCheckable(True)
         self.tool_bar.addAction(self.action_image)
         # self.action_image.toggle()
         # self.action_image.setChecked(True)
 
         self.action_folder_open = FAction(FIcon.FOLDER_OPEN, "文件夹")
-        self.tool_bar.addAction(self.action_folder_open)
+        self.action_folder_open.setCheckable(True)
         self.action_folder_open.setChecked(True)
         self.action_folder_open.setEnabled(False)
+        self.tool_bar.addAction(self.action_folder_open)
 
         self.tool_bar.addSeparator()
 
