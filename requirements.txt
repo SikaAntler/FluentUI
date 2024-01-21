@@ -1,4 +1,0 @@
-pycocoa; platform_system == "Darwin"
-pyobjc; platform_system == "Darwin"
-pyside6
-pywin32; platform_system == "Windows"

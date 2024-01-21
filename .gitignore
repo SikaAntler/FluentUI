@@ -4,6 +4,9 @@
 # PyCharm
 /.idea/
 
+# pyproject
+/fluentui.egg-info/
+
 # Python
 /venv/
 __pycache__/

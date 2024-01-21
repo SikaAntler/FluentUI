@@ -1,12 +1,7 @@
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (
-    QApplication,
-    QGridLayout,
-    QMainWindow,
-    QWidget,
-)
+from PySide6.QtWidgets import QApplication, QGridLayout, QMainWindow, QWidget
 
-from fluentui.utils import FIcon, FAction
+from fluentui.utils import FAction, FIcon
 from fluentui.widgets import FToolBar
 
 

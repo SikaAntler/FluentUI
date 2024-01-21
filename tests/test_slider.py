@@ -9,8 +9,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from fluentui.widgets import FSlider
 from fluentui.utils import set_font
+from fluentui.widgets import FSlider
 
 
 class TestSlider(QMainWindow):
