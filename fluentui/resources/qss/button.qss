@@ -1,4 +1,4 @@
-FPushButton {
+FPushButton, ToolButton {
     color: black;
     background-color: rgba(255, 255, 255, 0.7);
     border: 1px solid rgba(0, 0, 0, 0.073);
@@ -15,37 +15,69 @@ FPushButton[hasIcon=false] {
     padding: 5px 12px 6px 12px;
 }
 
-FPushButton:hover {
+FPushButton:hover, ToolButton:hover {
     background-color: rgba(249, 249, 249, 0.5);
 }
 
-FPushButton:pressed {
+FPushButton:pressed, ToolButton:pressed {
     color: rgba(0, 0, 0, 0.63);
     background-color: rgba(249, 249, 249, 0.3);
     border-bottom: 1px solid rgba(0, 0, 0, 0.073);
 }
 
-FPushButton:disabled {
+FPushButton:disabled, ToolButton:disabled {
     color: rgba(0, 0, 0, 0.36);
     background-color: rgba(249, 249, 0.3);
     border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+ToolButton {
+    padding: 5px 9px 6px 8px;
+}
+
+ToggleToolButton:checked {
+    color: white;
+    background-color: rgb(0, 159, 170);
+    border: 1px solid rgb(0, 167, 179);
+    border-bottom: 1px solid rgb(0, 119, 128);
+}
+
+ToggleToolButton:checked:hover {
+    background-color: rgb(0, 167, 179);
+    border: 1px solid rgb(45, 170, 179);
+    border-bottom: 1px solid rgb(0, 119, 128);
+}
+
+ToggleToolButton:checked:pressed {
+    color: rgba(255, 255, 255, 0.63);
+    background-color: rgb(62, 171, 179);
+    border: 1px solid rgb(62, 171, 179);
+}
+
+ToolButton:checked:disabled {
+    color: rgb(255, 255, 255, 0.9);
+    background-color: rgb(205, 205, 205);
+    border: 1px solid rgb(205, 205, 205);
 }
 
 FToolButton {
     background-color: transparent;
     border: none;
     border-radius: 5px;
-    /*padding: 5px 9px 6px 8px;*/
+    margin: 0px;
 }
 
 FToolButton:hover {
     background-color: rgba(0, 0, 0, 9);
+    border: none;
 }
 
 FToolButton:pressed {
     background-color: rgba(0, 0, 0, 6);
+    border: none;
 }
 
 FToolButton:disabled {
     background-color: transparent;
+    border: none;
 }

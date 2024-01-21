@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Union
 
 from PySide6.QtCore import (
     QEasingCurve,
@@ -46,14 +45,14 @@ class MenuAnimationType(Enum):
 
 class MenuItemDelegate(QStyledItemDelegate):
     @staticmethod
-    def _is_seperator(index: Union[QModelIndex, QPersistentModelIndex]):
+    def _is_seperator(index: QModelIndex | QPersistentModelIndex):
         return index.model().data(index, Qt.ItemDataRole.DecorationRole) == "seperator"
 
     def paint(
-            self,
-            painter: QPainter,
-            option: QStyleOptionViewItem,
-            index: Union[QModelIndex, QPersistentModelIndex],
+        self,
+        painter: QPainter,
+        option: QStyleOptionViewItem,
+        index: QModelIndex | QPersistentModelIndex,
     ) -> None:
         if not self._is_seperator(index):
             return super().paint(painter, option, index)

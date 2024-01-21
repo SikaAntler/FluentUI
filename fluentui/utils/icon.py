@@ -1,9 +1,12 @@
 from enum import Enum
 
-from PySide6.QtGui import QIcon
+from PySide6.QtCore import QFile, QRect, Qt
+from PySide6.QtGui import QIcon, QPainter
+from PySide6.QtSvg import QSvgRenderer
+from PySide6.QtXml import QDomDocument
 
 
-class FluentIcon(Enum):
+class FIcon(Enum):
     ADD = "add"
     ADD_CIRCLE = "add_circle"
     ADD_SQUARE = "add_square"
@@ -27,7 +30,7 @@ class FluentIcon(Enum):
     HOME = "home"
     IMAGE = "image"
     IMAGE_MULTIPLE = "image_multiple"
-    LINE_HORIZONTAL_7 = "line_horizontal_3"
+    LINE_HORIZONTAL_3 = "line_horizontal_3"
     OPEN_FOLDER = "open_folder"
     RENAME = "rename"
     SAVE = "save"
@@ -41,5 +44,39 @@ class FluentIcon(Enum):
     ZOOM_OUT = "zoom_out"
 
     def icon(self) -> QIcon:
-        path = f":/fluentui/{self.value}"
-        return QIcon(path)
+        return QIcon(self.path())
+
+    def path(self) -> str:
+        return f":/fluentui/{self.value}"
+
+    def render(self, painter: QPainter, rect: QRect, state: QIcon.State) -> None:
+        svg_file = QFile(self.path())
+        svg_file.open(QFile.OpenModeFlag.ReadOnly)
+        svg = svg_file.readAll()
+        svg_file.close()
+
+        if state == QIcon.State.On:
+            dom = QDomDocument()
+            dom.setContent(svg)
+            node_list = dom.elementsByTagName("path")
+            for i in range(node_list.length()):
+                path_nodel = node_list.item(i)
+                fill_node = path_nodel.attributes().namedItem("fill")
+                fill_node.setNodeValue("#F3F3F3")
+            svg = dom.toByteArray()
+
+        renderer = QSvgRenderer(svg)
+        renderer.setAspectRatioMode(Qt.AspectRatioMode.KeepAspectRatio)
+        renderer.render(painter, rect)
+
+
+def draw_icon(
+    icon: FIcon | QIcon,
+    painter: QPainter,
+    rect: QRect,
+    state: QIcon.State = QIcon.State.Off,
+) -> None:
+    if isinstance(icon, FIcon):
+        icon.render(painter, rect, state)
+    else:
+        icon.paint(painter, rect)

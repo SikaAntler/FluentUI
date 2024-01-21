@@ -6,7 +6,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from fluentui.utils import FluentIcon
+from fluentui.utils import FIcon
 from fluentui.widgets import FPushButton
 
 
@@ -20,13 +20,13 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.widget_central)
         self.glyt_main = QGridLayout(self.widget_central)
 
-        self.button_add = QPushButton(FluentIcon.ADD.icon(), "新建")
+        self.button_add = QPushButton(FIcon.ADD.icon(), "新建")
         self.glyt_main.addWidget(self.button_add, 0, 0)
 
-        self.button_delete = FPushButton(FluentIcon.DELETE.icon(), "删除")
+        self.button_delete = FPushButton(FIcon.DELETE.icon(), "删除")
         self.glyt_main.addWidget(self.button_delete, 0, 1)
 
-        self.button_last = FPushButton(FluentIcon.ARROW_CIRCLE_UP.icon(), "上一个")
+        self.button_last = FPushButton(FIcon.ARROW_CIRCLE_UP.icon(), "上一个")
         self.button_last.setEnabled(False)
         self.glyt_main.addWidget(self.button_last, 1, 0)
 

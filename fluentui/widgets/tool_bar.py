@@ -1,74 +1,52 @@
 from PySide6.QtCore import QRect, QSize, Qt
-from PySide6.QtGui import QAction, QColor, QPainter, QPaintEvent, QMouseEvent
-from PySide6.QtWidgets import QFrame, QWidget
+from PySide6.QtGui import QColor, QIcon, QPainter, QPaintEvent
+from PySide6.QtWidgets import QWidget
 
-from ..utils import set_font
-from .button import ToolButton
+from ..utils import FAction, draw_icon, set_font
+from .button import ToggleToolButton
 
 
-class FToolButton(ToolButton):
-    def __init__(self, parent=None) -> None:
-        super().__init__(parent=parent)
+class FToolButton(ToggleToolButton):
+    def __init__(self, action: FAction, parent=None) -> None:
+        super().__init__(icon=action.icon(), text=action.text(), parent=parent)
 
-        self.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonIconOnly)
-
-        self._action = None
-        self._is_pressed = False
+        # action需要设置checkable，否则isChecked始终返回False
+        action.setCheckable(True)
+        action.changed.connect(self._on_action_changed)
+        # 点击此button时同时改变action状态
+        self.clicked.connect(action.toggled)
+        # TODO: button点击后确会让action发出toggled信号，但此时action的isChecked并不会立即更新
+        self._action = action
         self._is_tight = False
 
-    def isTight(self) -> bool:
-        return self._is_tight
-
-    def mousePressEvent(self, event: QMouseEvent) -> None:
-        self._is_pressed = True
-        super().mousePressEvent(event)
-
-    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
-        self._is_pressed = False
-        super().mouseReleaseEvent(event)
-
-    def setAction(self, action: QAction) -> None:
-        self._action = action
-        self.clicked.connect(action.trigger)
-        action.changed.connect(self._on_action_changed)
-        action.toggled.connect(self._on_action_toggled)
+    def action(self) -> FAction:
+        return self._action
 
     def setTight(self, is_tight: bool) -> None:
         self._is_tight = is_tight
         self.update()
 
-    def _on_action_changed(self) -> None:
-        self.setIcon(self._action.icon())
-        self.setText(self._action.text())
-        self.setToolTip(self._action.toolTip())
-
-    def _on_action_toggled(self, is_checked: bool) -> None:
-        self.setChecked(True)
-        self.setChecked(is_checked)
-
-    def _is_icon_only(self) -> bool:
-        return self.toolButtonStyle() in [
-            Qt.ToolButtonStyle.ToolButtonIconOnly,
-            Qt.ToolButtonStyle.ToolButtonFollowStyle,
-        ]
+    def isTight(self) -> bool:
+        return self._is_tight
 
     def sizeHint(self) -> QSize:
-        style = self.toolButtonStyle()
+        if self._is_icon_only():
+            return QSize(36, 24) if self._is_tight else QSize(48, 34)
 
         # get the width of text
-        tw = self.fontMetrics().boundingRect(self.text()).width()
+        tw = self.fontMetrics().boundingRect(self._text).width()
 
-        if self._is_icon_only():
-            return QSize(36, 34) if self._is_tight else QSize(48, 34)
+        style = self.toolButtonStyle()
+        if style == Qt.ToolButtonStyle.ToolButtonTextOnly:
+            return QSize(tw + 32, 34)
         elif style == Qt.ToolButtonStyle.ToolButtonTextBesideIcon:
             return QSize(tw + 47, 34)
-        elif style == Qt.ToolButtonStyle.ToolButtonTextOnly:
-            return QSize(tw + 32, 34)
-        else:  # ToolButtonTextUnderIcon
+        elif style == Qt.ToolButtonStyle.ToolButtonTextUnderIcon:
             return QSize(tw + 32, 50)
 
-    def paintEvent(self, arg__1: QPaintEvent) -> None:
-        super().paintEvent(arg__1)
+    def paintEvent(self, event: QPaintEvent) -> None:
+        # 绘制QSS样式，且因QSS绘制的是背景色，所以需放在开头
+        super().paintEvent(event)
 
         painter = QPainter(self)
         painter.setRenderHints(
@@ -77,28 +55,60 @@ class FToolButton(ToolButton):
             | QPainter.RenderHint.SmoothPixmapTransform
         )
 
+        if self.isChecked():
+            painter.setPen(QColor("white"))
+            state = QIcon.State.On
+        else:
+            painter.setPen(QColor("black"))
+            state = QIcon.State.Off
+
         if not self.isEnabled():
-            painter.setOpacity(0.43)
+            # painter.setOpacity(0.43)
+            painter.setOpacity(0.9)  # 原代码一顿super调用结果似乎就是这个
         elif self._is_pressed:
             painter.setOpacity(0.63)
 
         style = self.toolButtonStyle()
-        iw, ih = self.iconSize().width(), self.iconSize().height()
+        iw, ih = self.iconSize().toTuple()
 
         if self._is_icon_only():
             x = (self.width() - iw) // 2
             y = (self.height() - ih) // 2
-            self._icon.paint(
-                painter,
-                QRect(x, y, iw, ih),
-                Qt.AlignmentFlag.AlignCenter,
-            )
+            draw_icon(self._icon, painter, QRect(x, y, iw, ih), state)
         elif style == Qt.ToolButtonStyle.ToolButtonTextOnly:
-            painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, self.text())
+            painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, self._text)
         elif style == Qt.ToolButtonStyle.ToolButtonTextBesideIcon:
-            pass
+            y = (self.height() - ih) // 2
+            draw_icon(self._icon, painter, QRect(11, y, iw, ih), state)
+            painter.drawText(
+                QRect(26, 0, self.width() - 26, self.height()),
+                Qt.AlignmentFlag.AlignCenter,
+                self._text,
+            )
         elif style == Qt.ToolButtonStyle.ToolButtonTextUnderIcon:
-            pass
+            x = (self.width() - iw) // 2
+            # super()._draw_icon(painter, QRect(x, 9, iw, ih))
+            draw_icon(self._icon, painter, QRect(x, 9, iw, ih))
+            painter.drawText(
+                QRect(0, ih + 13, self.width(), self.height() - ih - 13),
+                Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop,
+                self._text,
+            )
+
+    def _is_icon_only(self) -> bool:
+        return self.toolButtonStyle() in [
+            Qt.ToolButtonStyle.ToolButtonIconOnly,
+            Qt.ToolButtonStyle.ToolButtonFollowStyle,
+        ]
+
+    def _on_action_changed(self) -> None:
+        self.setIcon(self._action.icon())
+        self.setText(self._action.text())
+        self.setToolTip(self._action.toolTip())
+
+        # 且ToogleToolButton强制checkable，因此action的setCheckable不会同步到这里
+        self.setChecked(self._action.isChecked())
+        self.setEnabled(self._action.isEnabled())
 
 
 class FToolSeparator(QWidget):
@@ -113,7 +123,7 @@ class FToolSeparator(QWidget):
         painter.drawLine(5, 2, 5, self.height() - 2)
 
 
-class FToolBar(QFrame):
+class FToolBar(QWidget):
     def __init__(self, parent=None) -> None:
         super().__init__(parent=parent)
 
@@ -122,12 +132,12 @@ class FToolBar(QFrame):
         self._tool_button_style = Qt.ToolButtonStyle.ToolButtonIconOnly
         self._is_button_tight = False
         self._icon_size = QSize(24, 24)  # 原代码是16，但svg图片不同，这里用16显得有些小
+        self._font_size = 10
         self._spacing = 4
 
-        # set_font(self, font_size=12)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
-    def addAction(self, action: QAction) -> None:
+    def addAction(self, action: FAction) -> None:
         super().addAction(action)
 
         button = self._create_button(action)
@@ -138,15 +148,12 @@ class FToolBar(QFrame):
         separator = FToolSeparator()
         self._insert_widget_to_layout(len(self._widgets), separator)
 
-    def _create_button(self, action: QAction) -> FToolButton:
-        button = FToolButton()
-        button.setIcon(action.icon())
-        button.setText(action.text())
-        button.setAction(action)
+    def _create_button(self, action: FAction) -> FToolButton:
+        button = FToolButton(action)
         button.setToolButtonStyle(self._tool_button_style)
         button.setTight(self._is_button_tight)
         button.setIconSize(self._icon_size)
-        button.setFont(self.font())  # TODO: 是否可以放在FToolButton类里
+        set_font(button, font_size=self._font_size)
 
         return button
 
@@ -158,15 +165,15 @@ class FToolBar(QFrame):
         self.setFixedHeight(max(w.height() for w in self._widgets))
         self.updateGeometry()
 
-    def command_buttons(self) -> list[FToolButton]:
+    def buttons(self) -> list[FToolButton]:
         return [btn for btn in self._widgets if isinstance(btn, FToolButton)]
 
-    def set_tool_button_style(self, style: Qt.ToolButtonStyle) -> None:
+    def setToolButtonStyle(self, style: Qt.ToolButtonStyle) -> None:
         if style == self._tool_button_style:
             return
 
         self._tool_button_style = style
-        for btn in self.command_buttons():
+        for btn in self.buttons():
             btn.setToolButtonStyle(style)
 
     def _visible_widgets(self) -> list[QWidget]:
@@ -180,4 +187,3 @@ class FToolBar(QFrame):
         for widget in widgets:
             widget.move(x, (h - widget.height()) // 2)
             x += widget.width() + self._spacing
-            # widget.show()
