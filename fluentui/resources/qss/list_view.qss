@@ -1,0 +1,26 @@
+FListWidget {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    selection-background-color: transparent;
+    alternate-background-color: transparent;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+FListWidget:item {
+    background-color: transparent;
+    border: 0px;
+    padding-left: 11px;
+    padding-right: 11px;
+    height: 35px;
+}
+
+FListWidget:indicator {
+    background-color: transparent;
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    border: none;
+    margin-right: 4px;
+}

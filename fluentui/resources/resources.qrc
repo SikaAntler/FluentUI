@@ -40,7 +40,7 @@
 
         <file>qss/button.qss</file>
         <!--        <file>qss/group_box.qss</file>-->
-        <!--        <file>qss/list_widget.qss</file>-->
+        <file>qss/list_view.qss</file>
         <file>qss/menu.qss</file>
         <file>qss/radio_button.qss</file>
         <file>qss/window.qss</file>

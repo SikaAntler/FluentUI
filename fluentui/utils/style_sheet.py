@@ -23,7 +23,7 @@ class StyleSheet:
 class FluentStyleSheet(StyleSheet, Enum):
     BUTTON = "button"
     GROUP_BOX = "group_box"
-    LIST_WIDGET = "list_widget"
+    LIST_VIEW = "list_view"
     MENU = "menu"
     RADIO_BUTTON = "radio_button"
     WINDOW = "window"

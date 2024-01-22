@@ -1,5 +1,6 @@
 from .button import FPushButton
 from .dialog import FDialog
+from .list_view import FListWidget
 from .menu import FMenu, MenuAnimationType
 from .radio_button import FRadioButton
 from .slider import FSlider
