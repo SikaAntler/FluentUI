@@ -14,6 +14,7 @@ class FToolButton(ToolButton):
         self._on_action_changed()
         action.changed.connect(self._on_action_changed)
         # 点击此button时同时改变action状态
+        self.clicked.connect(action.triggered)
         self.clicked.connect(action.toggle)
         self._is_tight = False
 
@@ -53,18 +54,18 @@ class FToolButton(ToolButton):
             | QPainter.RenderHint.SmoothPixmapTransform
         )
 
+        if not self.isEnabled():
+            painter.setOpacity(0.43)
+        elif self._is_pressed:
+            painter.setOpacity(0.63)
+
         if self.isChecked():
+            painter.setOpacity(0.9)  # 原代码一顿super调用结果似乎就是这个
             painter.setPen(QColor("white"))
             state = QIcon.State.On
         else:
             painter.setPen(QColor("black"))
             state = QIcon.State.Off
-
-        if not self.isEnabled():
-            # painter.setOpacity(0.43)
-            painter.setOpacity(0.9)  # 原代码一顿super调用结果似乎就是这个
-        elif self._is_pressed:
-            painter.setOpacity(0.63)
 
         style = self.toolButtonStyle()
         iw, ih = self.iconSize().toTuple()

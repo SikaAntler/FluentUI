@@ -5,6 +5,7 @@
 /.idea/
 
 # pyproject
+/build/
 /fluentui.egg-info/
 
 # Python

@@ -27,7 +27,7 @@ FPushButton:pressed, ToolButton:pressed {
 
 FPushButton:disabled, ToolButton:disabled {
     color: rgba(0, 0, 0, 0.36);
-    background-color: rgba(249, 249, 0.3);
+    background-color: rgba(249, 249, 249, 0.3);
     border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
@@ -55,7 +55,7 @@ ToolButton:checked:pressed {
 }
 
 ToolButton:checked:disabled {
-    color: rgb(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.9);
     background-color: rgb(205, 205, 205);
     border: 1px solid rgb(205, 205, 205);
 }
