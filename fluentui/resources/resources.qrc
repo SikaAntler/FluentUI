@@ -15,7 +15,9 @@
         <file alias="camera_edit">icons/ic_fluent_camera_edit_20_regular.svg</file>
         <file alias="camera_off">icons/ic_fluent_camera_off_24_regular.svg</file>
         <file alias="center_horizontal">icons/ic_fluent_center_horizontal_24_regular.svg</file>
+        <file alias="crop">icons/ic_fluent_crop_24_regular.svg</file>
         <file alias="delete">icons/ic_fluent_delete_24_regular.svg</file>
+        <file alias="draw_text">icons/ic_fluent_draw_text_24_regular.svg</file>
         <file alias="edit">icons/ic_fluent_edit_24_regular.svg</file>
         <file alias="folder">icons/ic_fluent_folder_24_regular.svg</file>
         <file alias="folder_open">icons/ic_fluent_folder_open_24_regular.svg</file>
@@ -23,6 +25,7 @@
         <file alias="home">icons/ic_fluent_home_24_regular.svg</file>
         <file alias="image">icons/ic_fluent_image_24_regular.svg</file>
         <file alias="image_multiple">icons/ic_fluent_image_multiple_24_regular.svg</file>
+        <file alias="image_search">icons/ic_fluent_image_search_24_regular.svg</file>
         <file alias="lightbulb">icons/ic_fluent_lightbulb_24_regular.svg</file>
         <file alias="line_horizontal_3">icons/ic_fluent_line_horizontal_3_20_filled.svg</file>
         <file alias="open_folder">icons/ic_fluent_open_folder_24_regular.svg</file>

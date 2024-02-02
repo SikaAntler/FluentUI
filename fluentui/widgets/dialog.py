@@ -1,11 +1,13 @@
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QDialog
-
-from ..framesless import FramelessHelper
+from ..framesless import FramelessDialog
+from ..utils import FluentStyleSheet
 
 
-class FDialog(FramelessHelper, QDialog):
+class FDialog(FramelessDialog):
     def __init__(self) -> None:
         super().__init__()
 
-        self._set_window_flags(Qt.WindowType.Dialog)
+        # self._set_window_flags(Qt.WindowType.Dialog)
+
+        self.setContentsMargins(0, 32, 0, 0)
+
+        FluentStyleSheet.WINDOW.apply(self)

@@ -10,7 +10,7 @@ from PySide6.QtGui import (
 )
 from PySide6.QtWidgets import QPushButton, QToolButton
 
-from ..utils import FluentStyleSheet, set_font, FIcon
+from ..utils import FluentStyleSheet, Icon, set_font
 
 
 class FPushButton(QPushButton):
@@ -80,7 +80,7 @@ class FPushButton(QPushButton):
 
 
 class ToolButton(QToolButton):
-    def __init__(self, icon: FIcon, text: str, parent=None) -> None:
+    def __init__(self, icon: Icon, text: str, parent=None) -> None:
         super().__init__(parent=parent)
 
         self._icon = icon
@@ -95,11 +95,11 @@ class ToolButton(QToolButton):
         set_font(self, font_size=12)
         FluentStyleSheet.BUTTON.apply(self)
 
-    def setIcon(self, icon: FIcon) -> None:
+    def setIcon(self, icon: Icon) -> None:
         self._icon = icon
         self.update()
 
-    def icon(self) -> FIcon:
+    def icon(self) -> Icon:
         return self._icon
 
     def setText(self, text: str) -> None:

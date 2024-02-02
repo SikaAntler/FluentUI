@@ -1,19 +1,19 @@
 from PySide6.QtGui import QAction
 
-from .icon import FIcon
+from .icon import Icon
 
 
 class FAction(QAction):
-    def __init__(self, icon: FIcon = None, text: str = None, parent=None) -> None:
+    def __init__(self, icon: Icon = None, text: str = None, parent=None) -> None:
         super().__init__(parent=parent)
 
         self._icon = icon
         self._text = text
 
-    def icon(self) -> FIcon:
+    def icon(self) -> Icon:
         return self._icon
 
-    def setIcon(self, icon: FIcon) -> None:
+    def setIcon(self, icon: Icon) -> None:
         self._icon = icon
 
     def text(self) -> str:

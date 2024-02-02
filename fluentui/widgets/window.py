@@ -1,16 +1,9 @@
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QMainWindow
-
-from ..framesless import FramelessHelper
+from ..framesless import FramelessMainWindow
 from ..utils import FluentStyleSheet
 
 
-class FMainWindow(FramelessHelper, QMainWindow):
-    def __init__(self) -> None:
-        super().__init__()
-
-        self._set_window_flags(Qt.WindowType.Window)
-
-        self.setMenuWidget(self.title_bar)
+class FMainWindow(FramelessMainWindow):
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent=parent)
 
         FluentStyleSheet.WINDOW.apply(self)
