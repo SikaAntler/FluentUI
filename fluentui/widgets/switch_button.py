@@ -1,6 +1,6 @@
 from enum import Enum
 
-from PySide6.QtCore import Property, QEvent, QPropertyAnimation, Qt
+from PySide6.QtCore import Property, QEvent, QPropertyAnimation, Qt, Signal
 from PySide6.QtGui import (
     QColor,
     QEnterEvent,
@@ -126,6 +126,8 @@ class IndicatorPosition(Enum):
 
 
 class FSwitchButton(QWidget):
+    checkedChanged = Signal(bool)
+
     def __init__(
         self,
         indicator_pos: IndicatorPosition = IndicatorPosition.CENTER,
@@ -161,15 +163,19 @@ class FSwitchButton(QWidget):
         set_font(self, font_size=12)
 
         self._indicator.toggled.connect(self._switch_text)
+        self._indicator.toggled.connect(self.on_indicator_toggled)
 
-    def isChecked(self):
+    def isChecked(self) -> bool:
         return self._indicator.isChecked()
 
-    def setChecked(self, isChecked: bool):
+    def setChecked(self, isChecked: bool) -> None:
         if self._indicator_pos != IndicatorPosition.CENTER:
             self._switch_text()
         self._indicator.setChecked(isChecked)
 
-    def _switch_text(self):
+    def _switch_text(self) -> None:
         self._label.setText(self._text_on if self.isChecked() else self._text_off)
         self.adjustSize()
+
+    def on_indicator_toggled(self) -> None:
+        self.checkedChanged.emit(self._indicator.isChecked())
