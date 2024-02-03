@@ -49,15 +49,19 @@ class FramelessHelper:
     #     self.setWindowFlags(window_type)
 
 
-class MacOSFramelessWidget(FramelessHelper, QWidget):
-    def __init__(self, parent=None) -> None:
+class MacOSFramelessDialog(QDialog, FramelessHelper):
+    def __init__(self, parent=None):
         super().__init__(parent=parent)
+
+        self.title_bar.btn_minimize.hide()
+        self.title_bar.btn_maximize.hide()
+        self.title_bar.setDoubleClickedEnabled(False)
 
     def changeEvent(self, event: QEvent) -> None:
         FramelessHelper.changeEvent(self, event)
 
     def paintEvent(self, event: QPaintEvent) -> None:
-        QWidget.paintEvent(self, event)
+        QDialog.paintEvent(self, event)
         self._hide_system_title_bar()
 
     def resizeEvent(self, event: QResizeEvent) -> None:
@@ -83,18 +87,15 @@ class MacOSFramelessMainWindow(FramelessHelper, QMainWindow):
         FramelessHelper.resizeEvent(self, event)
 
 
-class MacOSFramelessDialog(QDialog, FramelessHelper):
-    def __init__(self, parent=None):
+class MacOSFramelessWidget(FramelessHelper, QWidget):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent=parent)
-
-        self.title_bar.btn_minimize.hide()
-        self.title_bar.btn_maximize.hide()
 
     def changeEvent(self, event: QEvent) -> None:
         FramelessHelper.changeEvent(self, event)
 
     def paintEvent(self, event: QPaintEvent) -> None:
-        QDialog.paintEvent(self, event)
+        QWidget.paintEvent(self, event)
         self._hide_system_title_bar()
 
     def resizeEvent(self, event: QResizeEvent) -> None:

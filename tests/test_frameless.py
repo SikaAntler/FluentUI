@@ -24,6 +24,8 @@ class Widget(FramelessWidget):
         self.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
         self.update_frameless()
 
+        self.title_bar.setDoubleClickedEnabled(False)
+
         # self.setAttribute(Qt.WidgetAttribute.WA_QuitOnClose)
 
         self.setWindowTitle("Frameless Widget")
@@ -58,6 +60,7 @@ class MainWindow(FramelessMainWindow):
         self.resize(1187, 667)
 
         self.widget_central = QWidget(self)
+        self.widget_central.setMouseTracking(True)
         self.setCentralWidget(self.widget_central)
 
         self.hlyt = QHBoxLayout(self)

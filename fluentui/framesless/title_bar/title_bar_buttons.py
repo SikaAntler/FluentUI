@@ -53,7 +53,7 @@ class TitleBarButton(QAbstractButton):
             self._set_state(TitleBarButtonState.PRESSED)
         super().mousePressEvent(e)
 
-    def is_pressed(self) -> bool:
+    def isPressed(self) -> bool:
         return self._state == TitleBarButtonState.PRESSED
 
     def _get_color(self) -> tuple[QColor, QColor]:

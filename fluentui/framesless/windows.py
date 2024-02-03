@@ -18,7 +18,11 @@ class FramelessHelper:
 
         self._resize_edge = None
 
+        self.installEventFilter(self)
+
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
+        super().mouseMoveEvent(event)
+
         if not self.isMaximized():
             x, y = event.position().toTuple()
             is_top = y < self.BORDER
@@ -58,11 +62,15 @@ class FramelessHelper:
             self._resize_edge = edge
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
+        super().mousePressEvent(event)
+
         if event.button() == Qt.MouseButton.LeftButton:
             if self._resize_edge is not None:
                 self.windowHandle().startSystemResize(self._resize_edge)
 
     def resizeEvent(self, event: QResizeEvent) -> None:
+        super().resizeEvent(event)
+
         self.title_bar.resize(self.width(), self.title_bar.height())
 
     def update_frameless(self) -> None:
@@ -82,6 +90,7 @@ class WindowsFrameDialog(FramelessHelper, QDialog):
 
         self.title_bar.btn_minimize.hide()
         self.title_bar.btn_maximize.hide()
+        self.title_bar.setDoubleClickedEnabled(False)
 
 
 class WindowsFramelessMainWindow(FramelessHelper, QMainWindow):
