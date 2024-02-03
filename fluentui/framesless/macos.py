@@ -49,7 +49,7 @@ class FramelessHelper:
     #     self.setWindowFlags(window_type)
 
 
-class MacFramelessWidget(FramelessHelper, QWidget):
+class MacOSFramelessWidget(FramelessHelper, QWidget):
     def __init__(self, parent=None) -> None:
         super().__init__(parent=parent)
 
@@ -64,7 +64,7 @@ class MacFramelessWidget(FramelessHelper, QWidget):
         FramelessHelper.resizeEvent(self, event)
 
 
-class MacFramelessMainWindow(FramelessHelper, QMainWindow):
+class MacOSFramelessMainWindow(FramelessHelper, QMainWindow):
     def __init__(self, parent=None) -> None:
         super().__init__(parent=parent)
 
@@ -83,7 +83,7 @@ class MacFramelessMainWindow(FramelessHelper, QMainWindow):
         FramelessHelper.resizeEvent(self, event)
 
 
-class MacFramelessDialog(QDialog, FramelessHelper):
+class MacOSFramelessDialog(QDialog, FramelessHelper):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 

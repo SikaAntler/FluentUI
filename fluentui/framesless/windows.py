@@ -1,15 +1,15 @@
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QMouseEvent, QResizeEvent
+from PySide6.QtWidgets import QDialog, QMainWindow, QWidget
 
 from .title_bar import TitleBar
 
 
-# from PySide6.QtWidgets import QMainWindow
 # class FramelessHelper(QMainWindow):  # PySide6多继承有bug
 class FramelessHelper:
     BORDER = 5
 
-    def __init__(self) -> None:
+    def __init__(self, parent=None) -> None:
         super().__init__()
 
         self.setMouseTracking(True)
@@ -65,10 +65,36 @@ class FramelessHelper:
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.title_bar.resize(self.width(), self.title_bar.height())
 
-    def _set_window_flags(self, window_type: Qt.WindowType) -> None:
+    def update_frameless(self) -> None:
         self.setWindowFlags(
-            window_type
+            self.windowFlags()
             | Qt.WindowType.FramelessWindowHint
             # | Qt.WindowType.WindowSystemMenuHint
             | Qt.WindowType.WindowMinimizeButtonHint
         )
+
+
+class WindowsFrameDialog(FramelessHelper, QDialog):
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent=parent)
+
+        self.update_frameless()
+
+        self.title_bar.btn_minimize.hide()
+        self.title_bar.btn_maximize.hide()
+
+
+class WindowsFramelessMainWindow(FramelessHelper, QMainWindow):
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent=parent)
+
+        self.update_frameless()
+
+        self.setMenuWidget(self.title_bar)
+
+
+class WindowsFramesWidget(FramelessHelper, QWidget):
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent=parent)
+
+        self.update_frameless()

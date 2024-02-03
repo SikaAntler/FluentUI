@@ -1,6 +1,6 @@
 from enum import Enum
 
-from PySide6.QtCore import QFile, QRect, Qt
+from PySide6.QtCore import QFile, QRect, QRectF, Qt
 from PySide6.QtGui import QIcon, QPainter
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtXml import QDomDocument
@@ -13,7 +13,9 @@ class Icon:
     def path(self) -> str:
         raise NotImplementedError
 
-    def render(self, painter: QPainter, rect: QRect, state: QIcon.State) -> None:
+    def render(
+        self, painter: QPainter, rect: QRect | QRectF, state: QIcon.State
+    ) -> None:
         svg_file = QFile(self.path())
         svg_file.open(QFile.OpenModeFlag.ReadOnly)
         svg = svg_file.readAll()
@@ -83,10 +85,11 @@ class FIcon(Icon, Enum):
 def draw_icon(
     icon: Icon | QIcon,
     painter: QPainter,
-    rect: QRect,
+    rect: QRect | QRectF,
     state: QIcon.State = QIcon.State.Off,
 ) -> None:
     if isinstance(icon, Icon):
         icon.render(painter, rect, state)
     else:
-        icon.paint(painter, rect)
+        rect = rect if isinstance(rect, QRect) else rect.toRect()
+        icon.paint(painter, rect, state=state)

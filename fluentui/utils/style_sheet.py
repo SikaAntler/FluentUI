@@ -25,6 +25,7 @@ class FluentStyleSheet(StyleSheet, Enum):
     GROUP_BOX = "group_box"
     LIST_VIEW = "list_view"
     MENU = "menu"
+    NAVIGATION = "navigation"
     RADIO_BUTTON = "radio_button"
     WINDOW = "window"
 

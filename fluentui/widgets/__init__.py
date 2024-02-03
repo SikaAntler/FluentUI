@@ -2,6 +2,14 @@ from .button import FPushButton
 from .dialog import FDialog
 from .list_view import FListWidget
 from .menu import FMenu, MenuAnimationType
+from .navigation import (
+    NavigationPanel,
+    NavigationPushButton,
+    NavigationSeparator,
+    NavigationToolButton,
+    NavigationWidget,
+    PanelPosition,
+)
 from .radio_button import FRadioButton
 from .slider import FSlider
 from .switch_button import FSwitchButton, IndicatorPosition
