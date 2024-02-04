@@ -115,7 +115,6 @@ class NavigationPushButton(NavigationWidget):
             painter.setBrush(QColor(0, 0, 0, 10))
             painter.drawRoundedRect(self.rect(), 5, 5)
 
-        # TODO: icon大小可变
         # self._icon.paint(painter, 11.5, 10, 16, 16)
         x = (40 - self.ICON_SIZE) / 2 - 0.5
         y = (36 - self.ICON_SIZE) / 2

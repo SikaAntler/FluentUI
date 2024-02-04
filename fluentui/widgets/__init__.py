@@ -3,6 +3,7 @@ from .dialog import FDialog
 from .list_view import FListWidget
 from .menu import FMenu, MenuAnimationType
 from .navigation import (
+    NavigationInterface,
     NavigationPanel,
     NavigationPushButton,
     NavigationSeparator,

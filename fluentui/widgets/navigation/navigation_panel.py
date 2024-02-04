@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Callable
 
 from PySide6.QtCore import (
     QEasingCurve,
@@ -12,6 +13,7 @@ from PySide6.QtWidgets import QVBoxLayout, QWidget
 
 from ...utils import FIcon, FluentStyleSheet
 from .navigation_widget import (
+    NavigationPushButton,
     NavigationSeparator,
     NavigationToolButton,
     NavigationWidget,
@@ -30,11 +32,13 @@ class PanelState(Enum):
 
 
 class NavigationPanel(QWidget):
-    EXPANDED_WIDTH = 312
+    EXPANDED_WIDTH = 322
 
-    def __init__(self, parent=None) -> None:
+    def __init__(self, parent=None, hide: bool = False) -> None:
         super().__init__(parent=parent)
 
+        self._parent = parent
+        self._hide = hide
         self._state = PanelState.COLLAPSED
 
         # 布局
@@ -80,25 +84,71 @@ class NavigationPanel(QWidget):
 
         # self.resize(48, self.height())
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground)
+        self.setProperty("expand", False)
         FluentStyleSheet.NAVIGATION.apply(self)
 
     def _init_widgets(self) -> None:
         self.vlyt_top.addWidget(self.btn_menu)
 
-    def addWidget(self, widget: NavigationWidget, position=PanelPosition.TOP) -> None:
-        self.insertWidget(-1, widget, position)
+    def addWidget(
+        self,
+        widget: NavigationWidget,
+        on_clicked: Callable = None,
+        position: PanelPosition = PanelPosition.TOP,
+    ) -> None:
+        self.insertWidget(-1, widget, on_clicked, position)
 
     def insertWidget(
-        self, index, widget: NavigationWidget, position=PanelPosition.TOP
+        self,
+        index: int,
+        widget: NavigationWidget,
+        on_clicked: Callable = None,
+        position: PanelPosition = PanelPosition.TOP,
     ) -> None:
         widget.setParent(self)
+
+        if hasattr(widget, "text"):
+            widget.setObjectName(widget.text())
+        widget.clicked.connect(self.on_widget_clicked)
+
+        if on_clicked is not None:
+            widget.clicked.connect(on_clicked)
+
         if position == PanelPosition.TOP:
             self.vlyt_top.insertWidget(index, widget)
         elif position == PanelPosition.SCROLL:
             self.vlyt_scroll.insertWidget(index, widget)
         elif position == PanelPosition.BOTTOM:
             self.vlyt_bottom.insertWidget(index, widget)
-        # widget.show()
+
+    def addItem(
+        self,
+        icon: FIcon,
+        text: str,
+        on_clicked: Callable = None,
+        position: PanelPosition = PanelPosition.TOP,
+    ) -> None:
+        self.insertItem(-1, icon, text, on_clicked, position)
+
+    def insertItem(
+        self,
+        index: int,
+        icon,
+        text: str,
+        on_clicked: Callable = None,
+        position: PanelPosition = PanelPosition.TOP,
+    ) -> None:
+        widget = NavigationPushButton(icon, text)
+        self.insertWidget(index, widget, on_clicked, position)
+
+    def addSeperator(self, position: PanelPosition = PanelPosition.TOP) -> None:
+        self.insertSeperator(-1, position)
+
+    def insertSeperator(
+        self, index: int, position: PanelPosition = PanelPosition.TOP
+    ) -> None:
+        seperator = NavigationSeparator(self)
+        self.insertWidget(index, seperator, None, position)
 
     def toggle(self) -> None:
         if self._state == PanelState.COLLAPSED:
@@ -112,7 +162,16 @@ class NavigationPanel(QWidget):
 
         self._set_widgets_expanded(True)
 
-        self.show()
+        self.setProperty("expand", True)
+        self.setStyleSheet(self.styleSheet())
+
+        # panel的父类必须设置为窗口，否则会被其他控件覆盖
+        if not self.parent().isWindow():
+            pos = self.parent().pos()
+            pos = self.mapTo(self.window(), pos)
+            self.setParent(self.window())
+            self.move(pos)
+            self.show()
 
         self.animation.setStartValue(QRect(self.x(), self.y(), 48, self.height()))
         self.animation.setEndValue(
@@ -121,7 +180,6 @@ class NavigationPanel(QWidget):
         self.animation.start()
 
         self._state = PanelState.EXPANDED
-        # self.animation.setProperty("expand", True)
 
     def collapse(self) -> None:
         if self.animation.state() == QPropertyAnimation.State.Running:
@@ -136,12 +194,14 @@ class NavigationPanel(QWidget):
         self.animation.start()
 
         self._state = PanelState.COLLAPSED
-        # self.animation.setProperty("expand", False)
 
     def on_animation_finished(self):
-        # if not self.animation.property("expand"):
         if self._state == PanelState.COLLAPSED:
-            self.hide()
+            self.setProperty("expand", False)
+            self.setStyleSheet(self.styleSheet())
+
+            if self._hide:
+                self.hide()
 
     def setMenuButtonVisible(self, is_visible: bool) -> None:
         self.btn_menu.setVisible(is_visible)
@@ -159,6 +219,14 @@ class NavigationPanel(QWidget):
             self.setFixedHeight(event.size().height() - 31)
 
         return super().eventFilter(watched, event)
+
+    def setCurrentItem(self, name: str) -> None:
+        for widget in self.findChildren(NavigationPushButton):
+            widget.setSelected(widget.text() == name)
+
+    def on_widget_clicked(self) -> None:
+        widget = self.sender()
+        self.setCurrentItem(widget.objectName())
 
 
 class NavigationItemLayout(QVBoxLayout):
