@@ -1,5 +1,7 @@
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QMouseEvent, QResizeEvent
+from enum import Enum
+
+from PySide6.QtCore import QEvent, QObject, QPointF, Qt
+from PySide6.QtGui import QMouseEvent
 from PySide6.QtWidgets import QDialog, QMainWindow, QWidget
 
 from .title_bar import TitleBar
@@ -16,62 +18,69 @@ class FramelessHelper:
 
         self.title_bar = TitleBar(self)
 
-        self._resize_edge = None
+        self._edge = None
 
-        self.installEventFilter(self)
+        self.title_bar.installEventFilter(self)
+
+    def _get_edge_cursor(self, pos: QPointF) -> tuple[Qt.Edge | None, Qt.CursorShape]:
+        x, y = pos.toTuple()
+        is_top = y < self.BORDER
+        is_left = x < self.BORDER
+        is_right = self.width() - self.BORDER < x
+        is_bottom = self.height() - self.BORDER < y
+
+        if is_left and is_top:  # 左上
+            edge = Qt.Edge.LeftEdge | Qt.Edge.TopEdge
+            cursor = Qt.CursorShape.SizeFDiagCursor
+        elif is_right and is_top:  # 右上
+            edge = Qt.Edge.RightEdge | Qt.Edge.TopEdge
+            cursor = Qt.CursorShape.SizeBDiagCursor
+        elif is_right and is_bottom:  # 右下
+            edge = Qt.Edge.RightEdge | Qt.Edge.BottomEdge
+            cursor = Qt.CursorShape.SizeFDiagCursor
+        elif is_left and is_bottom:  # 左下
+            edge = Qt.Edge.LeftEdge | Qt.Edge.BottomEdge
+            cursor = Qt.CursorShape.SizeBDiagCursor
+        elif is_top:
+            edge = Qt.Edge.TopEdge
+            cursor = Qt.CursorShape.SizeVerCursor
+        elif is_left:
+            edge = Qt.Edge.LeftEdge
+            cursor = Qt.CursorShape.SizeHorCursor
+        elif is_right:
+            edge = Qt.Edge.RightEdge
+            cursor = Qt.CursorShape.SizeHorCursor
+        elif is_bottom:
+            edge = Qt.Edge.BottomEdge
+            cursor = Qt.CursorShape.SizeVerCursor
+        else:
+            edge = None
+            cursor = Qt.CursorShape.ArrowCursor
+
+        return edge, cursor
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
+        if not self.isMaximized():
+            self._edge, cursor = self._get_edge_cursor(event.position())
+            self.setCursor(cursor)
+
         super().mouseMoveEvent(event)
 
-        if not self.isMaximized():
-            x, y = event.position().toTuple()
-            is_top = y < self.BORDER
-            is_left = x < self.BORDER
-            is_right = self.width() - self.BORDER < x
-            is_bottom = self.height() - self.BORDER < y
-
-            if is_left and is_top:  # 左上
-                cursor = Qt.CursorShape.SizeFDiagCursor
-                edge = Qt.Edge.LeftEdge | Qt.Edge.TopEdge
-            elif is_right and is_top:  # 右上
-                cursor = Qt.CursorShape.SizeBDiagCursor
-                edge = Qt.Edge.RightEdge | Qt.Edge.TopEdge
-            elif is_right and is_bottom:  # 右下
-                cursor = Qt.CursorShape.SizeFDiagCursor
-                edge = Qt.Edge.RightEdge | Qt.Edge.BottomEdge
-            elif is_left and is_bottom:  # 左下
-                cursor = Qt.CursorShape.SizeBDiagCursor
-                edge = Qt.Edge.LeftEdge | Qt.Edge.BottomEdge
-            elif is_top:
-                cursor = Qt.CursorShape.SizeVerCursor
-                edge = Qt.Edge.TopEdge
-            elif is_left:
-                cursor = Qt.CursorShape.SizeHorCursor
-                edge = Qt.Edge.LeftEdge
-            elif is_right:
-                cursor = Qt.CursorShape.SizeHorCursor
-                edge = Qt.Edge.RightEdge
-            elif is_bottom:
-                cursor = Qt.CursorShape.SizeVerCursor
-                edge = Qt.Edge.BottomEdge
-            else:
-                cursor = Qt.CursorShape.ArrowCursor
-                edge = None
-
-            self.setCursor(cursor)
-            self._resize_edge = edge
-
     def mousePressEvent(self, event: QMouseEvent) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
+            self._edge, cursor = self._get_edge_cursor(event.position())
+            self.setCursor(cursor)
+            if self._edge is not None:
+                self.windowHandle().startSystemResize(self._edge)
+
         super().mousePressEvent(event)
 
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
-            if self._resize_edge is not None:
-                self.windowHandle().startSystemResize(self._resize_edge)
+            self.setCursor(Qt.CursorShape.ArrowCursor)
+            self._edge = None
 
-    def resizeEvent(self, event: QResizeEvent) -> None:
-        super().resizeEvent(event)
-
-        self.title_bar.resize(self.width(), self.title_bar.height())
+        super().mouseReleaseEvent(event)
 
     def update_frameless(self) -> None:
         self.setWindowFlags(
@@ -80,6 +89,16 @@ class FramelessHelper:
             # | Qt.WindowType.WindowSystemMenuHint
             | Qt.WindowType.WindowMinimizeButtonHint
         )
+
+    def eventFilter(self, watched: QObject, event: QEvent) -> bool:
+        if watched is self.title_bar and event.type() == QEvent.Type.MouseButtonPress:
+            if self._edge is None:
+                return False
+            else:
+                self.mousePressEvent(event)
+                return True
+
+        return super().eventFilter(watched, event)
 
 
 class WindowsFrameDialog(FramelessHelper, QDialog):

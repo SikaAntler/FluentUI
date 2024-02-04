@@ -146,8 +146,8 @@ class TestInterface(FramelessMainWindow):
 if __name__ == "__main__":
     app = QApplication()
 
-    panel = TestPanel()
-    panel.show()
+    # panel = TestPanel()
+    # panel.show()
 
     win = TestInterface()
     win.show()

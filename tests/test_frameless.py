@@ -62,9 +62,7 @@ class MainWindow(FramelessMainWindow):
         self.widget_central = QWidget(self)
         self.widget_central.setMouseTracking(True)
         self.setCentralWidget(self.widget_central)
-
-        self.hlyt = QHBoxLayout(self)
-        self.widget_central.setLayout(self.hlyt)
+        self.hlyt = QHBoxLayout(self.widget_central)
 
         self.frameless_widget = Widget(self)
 

@@ -211,7 +211,10 @@ class NavigationPanel(QWidget):
             widget.setExpanded(is_expanded)
 
     def eventFilter(self, watched: QObject, event: QEvent) -> bool:
-        if event.type() == QEvent.Type.MouseButtonRelease:
+        if (
+            event.type() == QEvent.Type.MouseButtonRelease
+            and self._state == PanelState.EXPANDED
+        ):
             if not self.geometry().contains(event.pos()):
                 self.collapse()
 
