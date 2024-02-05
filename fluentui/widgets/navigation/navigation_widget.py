@@ -75,7 +75,7 @@ class NavigationPushButton(NavigationWidget):
         self._icon = icon
         self._text = text
 
-        set_font(self, font_size=12)
+        set_font(self)
 
     def icon(self) -> FIcon:
         return self._icon

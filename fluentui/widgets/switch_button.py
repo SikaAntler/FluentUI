@@ -160,7 +160,7 @@ class FSwitchButton(QWidget):
 
         # self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground)
         self.setFixedHeight(22)
-        set_font(self, font_size=12)
+        set_font(self)
 
         self._indicator.toggled.connect(self._switch_text)
         self._indicator.toggled.connect(self.on_indicator_toggled)

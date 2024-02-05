@@ -47,7 +47,7 @@ def get_font(
 def set_font(
     widget: QWidget,
     mono: bool = False,
-    font_size: int = 14,
+    font_size: int = 12,
     weight: QFont.Weight = QFont.Weight.Normal,
     italic: bool = False,
 ) -> None:

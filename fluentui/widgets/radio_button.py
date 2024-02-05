@@ -11,4 +11,4 @@ class FRadioButton(QRadioButton):
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground)
         FluentStyleSheet.RADIO_BUTTON.apply(self)
 
-        set_font(self, font_size=12)
+        set_font(self)

@@ -29,7 +29,7 @@ class FPushButton(QPushButton):
         self._is_hover = False
         self._is_pressed = False
 
-        set_font(self, font_size=12)
+        set_font(self)
         FluentStyleSheet.BUTTON.apply(self)
 
     def enterEvent(self, event: QEnterEvent) -> None:
@@ -92,7 +92,7 @@ class ToolButton(QToolButton):
 
         self._post_init()
 
-        set_font(self, font_size=12)
+        set_font(self)
         FluentStyleSheet.BUTTON.apply(self)
 
     def setIcon(self, icon: Icon) -> None:

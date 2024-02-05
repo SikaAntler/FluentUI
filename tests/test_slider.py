@@ -61,7 +61,7 @@ class TestSliderWithValue(QMainWindow):
         self.hlyt_main.addWidget(self.slider, 11)
 
         self.lbl_value = QLabel(str(self.slider.minimum()))
-        set_font(self.lbl_value, font_size=12)
+        set_font(self.lbl_value)
         self.hlyt_main.addWidget(self.lbl_value, 1, Qt.AlignmentFlag.AlignCenter)
 
         self.slider.valueChanged.connect(self.on_slider_valueChange)
