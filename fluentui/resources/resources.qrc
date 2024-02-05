@@ -17,6 +17,7 @@
         <file alias="center_horizontal">icons/ic_fluent_center_horizontal_24_regular.svg</file>
         <file alias="crop">icons/ic_fluent_crop_24_regular.svg</file>
         <file alias="delete">icons/ic_fluent_delete_24_regular.svg</file>
+        <file alias="dismiss">icons/ic_fluent_dismiss_24_regular.svg</file>
         <file alias="draw_text">icons/ic_fluent_draw_text_24_regular.svg</file>
         <file alias="edit">icons/ic_fluent_edit_24_regular.svg</file>
         <file alias="folder">icons/ic_fluent_folder_24_regular.svg</file>
@@ -42,6 +43,7 @@
         <file alias="zoom_out">icons/ic_fluent_zoom_out_24_regular.svg</file>
 
         <file>qss/button.qss</file>
+        <file>qss/line_edit.qss</file>
         <!--        <file>qss/group_box.qss</file>-->
         <file>qss/list_view.qss</file>
         <file>qss/menu.qss</file>

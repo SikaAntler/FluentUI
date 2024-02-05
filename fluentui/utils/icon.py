@@ -14,21 +14,27 @@ class Icon:
         raise NotImplementedError
 
     def render(
-        self, painter: QPainter, rect: QRect | QRectF, state: QIcon.State
+        self,
+        painter: QPainter,
+        rect: QRect | QRectF,
+        state: QIcon.State,
+        fill: str = None,
     ) -> None:
         svg_file = QFile(self.path())
         svg_file.open(QFile.OpenModeFlag.ReadOnly)
         svg = svg_file.readAll()
         svg_file.close()
 
-        if state == QIcon.State.On:
+        if state == QIcon.State.On or fill is not None:
+            color = "#F3F3F3" if state == QIcon.State.On else fill
+
             dom = QDomDocument()
             dom.setContent(svg)
             node_list = dom.elementsByTagName("path")
             for i in range(node_list.length()):
                 path_nodel = node_list.item(i)
                 fill_node = path_nodel.attributes().namedItem("fill")
-                fill_node.setNodeValue("#F3F3F3")
+                fill_node.setNodeValue(color)
             svg = dom.toByteArray()
 
         renderer = QSvgRenderer(svg)
@@ -54,6 +60,7 @@ class FIcon(Icon, Enum):
     CENTER_HORIZONTAL = "center_horizontal"
     CROP = "crop"
     DELETE = "delete"
+    DISMISS = "dismiss"
     DRAW_TEXT = "draw_text"
     EDIT = "edit"
     FOLDER = "folder"
@@ -87,9 +94,10 @@ def draw_icon(
     painter: QPainter,
     rect: QRect | QRectF,
     state: QIcon.State = QIcon.State.Off,
+    fill: str = None,
 ) -> None:
     if isinstance(icon, Icon):
-        icon.render(painter, rect, state)
+        icon.render(painter, rect, state, fill)
     else:
         rect = rect if isinstance(rect, QRect) else rect.toRect()
         icon.paint(painter, rect, state=state)

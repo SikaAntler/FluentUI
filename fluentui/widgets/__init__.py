@@ -1,5 +1,6 @@
 from .button import FPushButton
 from .dialog import FDialog
+from .line_edit import FLineEdit
 from .list_view import FListWidget
 from .menu import FMenu, MenuAnimationType
 from .navigation import (
