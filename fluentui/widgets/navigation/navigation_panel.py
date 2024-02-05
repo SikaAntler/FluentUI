@@ -232,6 +232,10 @@ class NavigationPanel(QWidget):
         widget = self.sender()
         self.setCurrentItem(widget.objectName())
 
+        # 点击后自动折叠
+        if self._state == PanelState.EXPANDED:
+            self.collapse()
+
 
 class NavigationItemLayout(QVBoxLayout):
     def setGeometry(self, rect: QRect) -> None:
