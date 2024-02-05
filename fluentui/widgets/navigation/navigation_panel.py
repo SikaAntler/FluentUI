@@ -11,7 +11,7 @@ from PySide6.QtCore import (
 )
 from PySide6.QtWidgets import QVBoxLayout, QWidget
 
-from ...utils import FIcon, FluentStyleSheet
+from ...utils import FIcon, FStyleSheet
 from .navigation_widget import (
     NavigationPushButton,
     NavigationSeparator,
@@ -85,7 +85,7 @@ class NavigationPanel(QWidget):
         # self.resize(48, self.height())
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground)
         self.setProperty("expand", False)
-        FluentStyleSheet.NAVIGATION.apply(self)
+        FStyleSheet.NAVIGATION.apply(self)
 
     def _init_widgets(self) -> None:
         self.vlyt_top.addWidget(self.btn_menu)

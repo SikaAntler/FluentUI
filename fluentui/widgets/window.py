@@ -1,9 +1,9 @@
 from ..framesless import FramelessMainWindow
-from ..utils import FluentStyleSheet
+from ..utils import FStyleSheet
 
 
 class FMainWindow(FramelessMainWindow):
     def __init__(self, parent=None) -> None:
         super().__init__(parent=parent)
 
-        FluentStyleSheet.WINDOW.apply(self)
+        FStyleSheet.WINDOW.apply(self)

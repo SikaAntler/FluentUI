@@ -20,7 +20,7 @@ class StyleSheet:
         return qss
 
 
-class FluentStyleSheet(StyleSheet, Enum):
+class FStyleSheet(StyleSheet, Enum):
     BUTTON = "button"
     GROUP_BOX = "group_box"
     LIST_VIEW = "list_view"

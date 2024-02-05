@@ -6,7 +6,7 @@ from PySide6.QtWidgets import (
     QStyleOptionViewItem,
 )
 
-from ..utils import FluentStyleSheet, ThemeColor
+from ..utils import FStyleSheet, ThemeColor
 from .table_view import TableItemDelegate
 
 
@@ -42,7 +42,7 @@ class FListWidget(QListWidget):
         self.entered.connect(lambda i: self._set_hover_row(i.row()))
         self.pressed.connect(lambda i: self._set_pressed_row(i.row()))
 
-        FluentStyleSheet.LIST_VIEW.apply(self)
+        FStyleSheet.LIST_VIEW.apply(self)
 
     def clearSelection(self) -> None:
         super().clearSelection()

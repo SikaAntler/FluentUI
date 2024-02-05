@@ -1,5 +1,5 @@
 from ..framesless import FramelessDialog
-from ..utils import FluentStyleSheet
+from ..utils import FStyleSheet
 
 
 class FDialog(FramelessDialog):
@@ -10,4 +10,4 @@ class FDialog(FramelessDialog):
 
         self.setContentsMargins(0, 32, 0, 0)
 
-        FluentStyleSheet.WINDOW.apply(self)
+        FStyleSheet.WINDOW.apply(self)

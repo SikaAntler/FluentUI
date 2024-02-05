@@ -32,7 +32,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from ..utils import FluentStyleSheet, set_font
+from ..utils import FStyleSheet, set_font
 
 
 class MenuAnimationType(Enum):
@@ -148,7 +148,7 @@ class FMenu(QWidget):
 
         self.ani_manager = None
 
-        FluentStyleSheet.MENU.apply(self)
+        FStyleSheet.MENU.apply(self)
 
         # TODO: 增加对shortcut的支持，至少需要写：
         #  1. ShortcutMenuItemDelegate

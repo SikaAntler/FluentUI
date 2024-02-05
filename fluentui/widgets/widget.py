@@ -1,5 +1,5 @@
 from ..framesless import FramelessWidget
-from ..utils import FluentStyleSheet
+from ..utils import FStyleSheet
 
 
 class FWidget(FramelessWidget):
@@ -10,4 +10,4 @@ class FWidget(FramelessWidget):
 
         self.setContentsMargins(0, 32, 0, 0)  # 为TitleBar留空
 
-        FluentStyleSheet.WINDOW.apply(self)
+        FStyleSheet.WINDOW.apply(self)

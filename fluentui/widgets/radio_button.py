@@ -1,7 +1,7 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QRadioButton
 
-from ..utils import FluentStyleSheet, set_font
+from ..utils import FStyleSheet, set_font
 
 
 class FRadioButton(QRadioButton):
@@ -9,6 +9,6 @@ class FRadioButton(QRadioButton):
         super().__init__(text=text, parent=parent)
 
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground)
-        FluentStyleSheet.RADIO_BUTTON.apply(self)
+        FStyleSheet.RADIO_BUTTON.apply(self)
 
         set_font(self)
