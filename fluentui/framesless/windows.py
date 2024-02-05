@@ -1,5 +1,3 @@
-from enum import Enum
-
 from PySide6.QtCore import QEvent, QObject, QPointF, Qt
 from PySide6.QtGui import QMouseEvent
 from PySide6.QtWidgets import QDialog, QMainWindow, QWidget
@@ -16,13 +14,20 @@ class FramelessHelper:
 
         self.setMouseTracking(True)
 
-        self.title_bar = TitleBar(self)
-
         self._edge = None
 
+        self.title_bar = TitleBar(self)
         self.title_bar.installEventFilter(self)
 
-    def _get_edge_cursor(self, pos: QPointF) -> tuple[Qt.Edge | None, Qt.CursorShape]:
+    def update_frameless(self) -> None:
+        self.setWindowFlags(
+            self.windowFlags()
+            | Qt.WindowType.FramelessWindowHint
+            # | Qt.WindowType.WindowSystemMenuHint
+            | Qt.WindowType.WindowMinimizeButtonHint
+        )
+
+    def _determine_edge_cursor(self, pos: QPointF) -> None:
         x, y = pos.toTuple()
         is_top = y < self.BORDER
         is_left = x < self.BORDER
@@ -57,38 +62,30 @@ class FramelessHelper:
             edge = None
             cursor = Qt.CursorShape.ArrowCursor
 
-        return edge, cursor
+        self._edge = edge
+        self.setCursor(cursor)
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
         if not self.isMaximized():
-            self._edge, cursor = self._get_edge_cursor(event.position())
-            self.setCursor(cursor)
+            self._determine_edge_cursor(event.position())
 
         super().mouseMoveEvent(event)
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
-            self._edge, cursor = self._get_edge_cursor(event.position())
-            self.setCursor(cursor)
             if self._edge is not None:
                 self.windowHandle().startSystemResize(self._edge)
 
         super().mousePressEvent(event)
 
-    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
-        if event.button() == Qt.MouseButton.LeftButton:
-            self.setCursor(Qt.CursorShape.ArrowCursor)
-            self._edge = None
-
-        super().mouseReleaseEvent(event)
-
-    def update_frameless(self) -> None:
-        self.setWindowFlags(
-            self.windowFlags()
-            | Qt.WindowType.FramelessWindowHint
-            # | Qt.WindowType.WindowSystemMenuHint
-            | Qt.WindowType.WindowMinimizeButtonHint
-        )
+    # def mouseReleaseEvent(self, event: QMouseEvent) -> None:
+    #     if event.button() == Qt.MouseButton.LeftButton:
+    #         self._edge = None
+    #         self.setCursor(Qt.CursorShape.ArrowCursor)
+    #         # print(self._edge)
+    #         # self._determine_edge_cursor(event.position())
+    #
+    #     super().mouseReleaseEvent(event)
 
     def eventFilter(self, watched: QObject, event: QEvent) -> bool:
         if watched is self.title_bar and event.type() == QEvent.Type.MouseButtonPress:

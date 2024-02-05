@@ -1,16 +1,15 @@
-from functools import partial
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication,
+    QFrame,
     QHBoxLayout,
     QLabel,
     QStackedWidget,
     QWidget,
-    QFrame,
 )
 
-from fluentui.utils import FIcon, set_font
 from fluentui.framesless import FramelessMainWindow
+from fluentui.utils import FIcon, set_font
 from fluentui.widgets import (
     NavigationInterface,
     NavigationPanel,
@@ -94,22 +93,35 @@ class TestInterface(FramelessMainWindow):
         self.hlyt = QHBoxLayout(self.widget_central)
         self.hlyt.setContentsMargins(0, 0, 0, 0)
         self.hlyt.setSpacing(0)
-        # self.widget_central.setLayout(self.hlyt)
 
         self.navigation = NavigationInterface(self)
-        # self.navigation.raise_()
         self.hlyt.addWidget(self.navigation)
         self.widget_stack = QStackedWidget(self)
         self.hlyt.addWidget(self.widget_stack, 1)
+
+        self.interface_camera = InterfaceWidget("相机页面", self)
+        self.add_interface(
+            self.interface_camera, FIcon.CAMERA, self.interface_camera.objectName()
+        )
+
+        self.interface_image = InterfaceWidget("图像页面", self)
+        self.add_interface(
+            self.interface_image, FIcon.IMAGE, self.interface_image.objectName()
+        )
+
+        self.navigation.addSeperator()
 
         self.interface_search = InterfaceWidget("搜索页面", self)
         self.add_interface(
             self.interface_search, FIcon.SEARCH, self.interface_search.objectName()
         )
 
-        self.interface_image = InterfaceWidget("图像页面", self)
+        self.interface_settings = InterfaceWidget("设置页面", self)
         self.add_interface(
-            self.interface_image, FIcon.IMAGE, self.interface_image.objectName()
+            self.interface_settings,
+            FIcon.SETTINGS,
+            self.interface_settings.objectName(),
+            PanelPosition.BOTTOM,
         )
 
         self.widget_stack.currentChanged.connect(self.on_widget_stack_currentChanged)
@@ -131,8 +143,16 @@ class TestInterface(FramelessMainWindow):
             """
         )
 
-    def add_interface(self, interface: QWidget, icon: FIcon, text: str) -> None:
-        self.navigation.addItem(icon, text, lambda: self.switch_interface(interface))
+    def add_interface(
+        self,
+        interface: QWidget,
+        icon: FIcon,
+        text: str,
+        position: PanelPosition = PanelPosition.TOP,
+    ) -> None:
+        self.navigation.addItem(
+            icon, text, lambda: self.switch_interface(interface), position
+        )
         self.widget_stack.addWidget(interface)
 
     def switch_interface(self, interface: QWidget) -> None:

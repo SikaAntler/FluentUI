@@ -74,9 +74,9 @@ class NavigationPanel(QWidget):
         self.vlyt_scroll.setSpacing(4)
         self.vlyt_scroll.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        self.vlyt_scroll.setContentsMargins(4, 0, 4, 0)
+        self.vlyt_bottom.setContentsMargins(4, 0, 4, 0)
         self.vlyt_bottom.setSpacing(4)
-        self.vlyt_bottom.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.vlyt_bottom.setAlignment(Qt.AlignmentFlag.AlignBottom)
 
         self.vlyt.addLayout(self.vlyt_top, 0)
         self.vlyt.addLayout(self.vlyt_scroll, 1)
@@ -218,8 +218,9 @@ class NavigationPanel(QWidget):
             if not self.geometry().contains(event.pos()):
                 self.collapse()
 
-        if event.type() == QEvent.Type.Resize:
-            self.setFixedHeight(event.size().height() - 31)
+        # if event.type() == QEvent.Type.Resize:
+        # self.setFixedHeight(event.size().height() - 31)
+        # 此处不能使用event.size()获取大小，返回值为1920*1080，未扣除底部菜单栏的高度
 
         return super().eventFilter(watched, event)
 

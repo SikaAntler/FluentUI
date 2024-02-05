@@ -1,6 +1,7 @@
 from typing import Callable
 
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QResizeEvent
 from PySide6.QtWidgets import QWidget
 
 from ...utils import FIcon
@@ -73,3 +74,6 @@ class NavigationInterface(QWidget):
 
     def setCurrentItem(self, name: str) -> None:
         self.panel.setCurrentItem(name)
+
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        self.panel.setFixedHeight(self.height())
