@@ -1,4 +1,4 @@
-from PySide6.QtCore import QRectF, Qt
+from PySide6.QtCore import QEvent, QObject, QRectF, Qt
 from PySide6.QtGui import (
     QFocusEvent,
     QMouseEvent,
@@ -6,9 +6,16 @@ from PySide6.QtGui import (
     QPainterPath,
     QPaintEvent,
 )
-from PySide6.QtWidgets import QHBoxLayout, QLineEdit, QToolButton
+from PySide6.QtWidgets import (
+    QHBoxLayout,
+    QLineEdit,
+    QPlainTextEdit,
+    QTextEdit,
+    QToolButton,
+    QWidget,
+)
 
-from fluentui.utils import FIcon, FStyleSheet, ThemeColor, draw_icon, set_font
+from ..utils import FIcon, FStyleSheet, ThemeColor, draw_icon, set_font
 
 
 class FLineEditButton(QToolButton):
@@ -104,9 +111,7 @@ class FLineEdit(QLineEdit):
             return
 
         painter = QPainter(self)
-        painter.setRenderHints(
-            QPainter.RenderHint.Antialiasing | QPainter.RenderHint.TextAntialiasing
-        )
+        painter.setRenderHints(QPainter.RenderHint.Antialiasing)
         painter.setPen(Qt.PenStyle.NoPen)
 
         # 绘制底部横条
@@ -120,3 +125,56 @@ class FLineEdit(QLineEdit):
         path = path.subtracted(rect_path)
 
         painter.fillPath(path, ThemeColor.PRIMARY.color())
+
+
+class TextEditLayer(QWidget):
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent=parent)
+
+        self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        parent.installEventFilter(self)
+
+    def eventFilter(self, watched: QObject, event: QEvent) -> bool:
+        if watched is self.parent() and event.type() == QEvent.Type.Resize:
+            # self.resize(self.parent().size())
+            self.resize(event.size())
+
+        return super().eventFilter(watched, event)
+
+    def paintEvent(self, event: QPaintEvent) -> None:
+        super().paintEvent(event)
+        if not self.hasFocus():
+            return
+
+        painter = QPainter(self)
+        painter.setRenderHints(QPainter.RenderHint.Antialiasing)
+        painter.setPen(Qt.PenStyle.NoPen)
+
+        m = self.contentsMargins()
+        path = QPainterPath()
+        w, h = self.width() - m.left() - m.right(), self.height()
+        path.addRoundedRect(QRectF(m.left(), h - 10, w, 10), 5, 5)
+
+        rect_path = QPainterPath()
+        rect_path.addRect(m.left(), h - 10, w, 7.5)
+        path = path.subtracted(rect_path)
+
+        painter.fillPath(path, ThemeColor.PRIMARY.color())
+
+
+class FPlainTextEdit(QPlainTextEdit):
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent=parent)
+
+        self.text_edit_layer = TextEditLayer(self)
+        FStyleSheet.LINE_EDIT.apply(self)
+        set_font(self)
+
+
+class FTextEdit(QTextEdit):
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent=parent)
+
+        self.text_edit_layer = TextEditLayer(self)
+        FStyleSheet.LINE_EDIT.apply(self)
+        set_font(self)

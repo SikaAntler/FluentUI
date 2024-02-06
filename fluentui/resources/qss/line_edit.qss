@@ -1,4 +1,4 @@
-FLineEdit {
+FLineEdit, FPlainTextEdit, FTextEdit {
     color: black;
     background-color: rgba(255, 255, 255, 0.7);
     border: 1px solid rgba(0, 0, 0, 13);
@@ -8,7 +8,11 @@ FLineEdit {
     selection-background-color: rgb(0, 159, 170);
 }
 
-FLineEdit:hover {
+FPlainTextEdit, FTextEdit {
+    padding: 2px 3px 2px 8px;
+}
+
+FLineEdit:hover, FPlainTextEdit:hover, FTextEdit:hover {
     background-color: rgba(249, 249, 249, 0.5);
     border: 1px solid rgba(0, 0, 0, 13);
     border-bottom: 1px solid rgba(0, 0, 0, 100);
@@ -19,7 +23,12 @@ FLineEdit:focus {
     border-bottom: 1px solid rgba(0, 0, 0, 13);
 }
 
-FLineEdit:disabled {
+FPlainTextEdit:focus, FTextEdit:focus {
+    background-color: white;
+    border-bottom: 1px solid rgb(0, 159, 170);
+}
+
+FLineEdit:disabled, FPlainTextEdit:disabled, FTextEdit:disabled {
     color: rgba(0, 0, 0, 150);
     background-color: rgba(249, 249, 249, 0.3);
     border: 1px solid rgba(0, 0, 0, 13);
