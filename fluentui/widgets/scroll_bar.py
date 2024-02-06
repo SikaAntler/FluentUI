@@ -170,12 +170,13 @@ class FScrollBar(QWidget):
         )
 
         self.ori_bar.rangeChanged.connect(self.setRange)
-        self.ori_bar.valueChanged.connect(self._on_valueChanged)
+        self.ori_bar.valueChanged.connect(self.setValue)
         self.valueChanged.connect(self.ori_bar.setValue)
 
         parent.installEventFilter(self)
 
         self.setRange(self.ori_bar.minimum(), self.ori_bar.maximum())
+        self.setVisible(self._maximum > 0)
 
     @Property(int, notify=valueChanged)
     def value(self) -> int:
@@ -268,6 +269,8 @@ class FScrollBar(QWidget):
         if watched is self.parent() and isinstance(event, QResizeEvent):
             self._update_geometry(watched.size())
             # self._update_geometry(event.size())
+            self._adjust_handle_size()
+            self._adjust_handle_pos()
 
         return super().eventFilter(watched, event)
 
@@ -337,9 +340,6 @@ class FScrollBar(QWidget):
     def wheelEvent(self, event: QWheelEvent) -> None:
         super().wheelEvent(event)
         self.parent().wheelEvent(event)
-
-    def _on_valueChanged(self, value: int) -> None:
-        self.setValue(value)
 
     def _on_page_up(self) -> None:
         self.setValue(self._value - self._page_step)
@@ -433,4 +433,44 @@ class FSmoothScrollBar(FScrollBar):
 
         self.animation = QPropertyAnimation(self, b"value", self)
         self.animation.setEasingCurve(QEasingCurve.Type.OutCubic)
-        self.animation.setDuration(500)
+
+        self._vertical_scroll_rate = 3
+        self._vertical_duration = 240
+        self._horizontal_scroll_rate = 60
+        self._horizontal_duration = 480
+
+        parent.viewport().installEventFilter(self)
+        self.installEventFilter(self)
+
+    def scrollByValue(self, dv: int) -> None:
+        self.animation.stop()
+
+        if self._orientation == Qt.Orientation.Vertical:
+            self.animation.setDuration(self._vertical_duration)
+        else:
+            self.animation.setDuration(self._horizontal_duration)
+
+        self.animation.setStartValue(self._value)
+        self.animation.setEndValue(self._value + dv)
+        self.animation.start()
+
+    def eventFilter(self, watched: QObject, event: QEvent) -> bool:
+        is_obj = watched is self.parent().viewport() or watched is self
+        if is_obj and isinstance(event, QWheelEvent):
+            delta = event.angleDelta()
+            if self._orientation == Qt.Orientation.Vertical and delta.y() != 0:
+                if delta.y() < 0:
+                    dv = self._vertical_scroll_rate
+                else:
+                    dv = -self._vertical_scroll_rate
+                self.scrollByValue(dv)
+                return True
+            elif self._orientation == Qt.Orientation.Horizontal and delta.x() != 0:
+                if delta.x() < 0:
+                    dv = self._horizontal_scroll_rate
+                else:
+                    dv = -self._horizontal_scroll_rate
+                self.scrollByValue(dv)
+                return True
+
+        return super().eventFilter(watched, event)

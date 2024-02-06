@@ -16,6 +16,7 @@ from PySide6.QtWidgets import (
 )
 
 from ..utils import FIcon, FStyleSheet, ThemeColor, draw_icon, set_font
+from .scroll_bar import FSmoothScrollBar
 
 
 class FLineEditButton(QToolButton):
@@ -167,6 +168,8 @@ class FPlainTextEdit(QPlainTextEdit):
         super().__init__(parent=parent)
 
         self.text_edit_layer = TextEditLayer(self)
+        self.scroll_bar_v = FSmoothScrollBar(Qt.Orientation.Vertical, self)
+        self.scroll_bar_h = FSmoothScrollBar(Qt.Orientation.Horizontal, self)
         FStyleSheet.LINE_EDIT.apply(self)
         set_font(self)
 
@@ -176,5 +179,7 @@ class FTextEdit(QTextEdit):
         super().__init__(parent=parent)
 
         self.text_edit_layer = TextEditLayer(self)
+        self.scroll_bar_v = FSmoothScrollBar(Qt.Orientation.Vertical, self)
+        self.scroll_bar_h = FSmoothScrollBar(Qt.Orientation.Horizontal, self)
         FStyleSheet.LINE_EDIT.apply(self)
         set_font(self)

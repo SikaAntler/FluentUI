@@ -1,21 +1,28 @@
+from string import ascii_uppercase
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
+    QPlainTextEdit,
     QVBoxLayout,
     QWidget,
-    QPlainTextEdit,
 )
 
-from fluentui.widgets import FScrollBar
 from fluentui.utils import set_font
+from fluentui.widgets import FScrollBar, FSmoothScrollBar
 
 
 class PlainTextEdit(QPlainTextEdit):
-    def __init__(self, orientation: Qt.Orientation, parent=None) -> None:
+    def __init__(self, smooth: bool, parent=None) -> None:
         super().__init__(parent=parent)
 
-        self.scroll_bar = FScrollBar(orientation, self)
+        if smooth:
+            self.scroll_bar_v = FSmoothScrollBar(Qt.Orientation.Vertical, self)
+            self.scroll_bar_h = FSmoothScrollBar(Qt.Orientation.Horizontal, self)
+        else:
+            self.scroll_bar_v = FScrollBar(Qt.Orientation.Vertical, self)
+            self.scroll_bar_h = FScrollBar(Qt.Orientation.Horizontal, self)
         self.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
         set_font(self)
 
@@ -31,15 +38,19 @@ class TestScrollBar(QMainWindow):
         self.setCentralWidget(self.widget_central)
         self.vlyt = QVBoxLayout(self.widget_central)
 
-        self.text_edit_v = PlainTextEdit(Qt.Orientation.Vertical, self)
-        self.text_edit_v.setPlainText(
-            "q\nw\ne\nr\nt\ny\nu\ni\no\np\na\ns\nd\nf\ng\nh\nj\nk\nl\n"
-        )
-        self.vlyt.addWidget(self.text_edit_v)
+        test_text = [ascii_uppercase * 3]
+        for i in range(1, 10):
+            text = ascii_uppercase[26 - i : 26] + ascii_uppercase[: 26 - i]
+            test_text.append(text * 3)
+        test_text = "\n".join(test_text)
 
-        self.text_edit_h = PlainTextEdit(Qt.Orientation.Horizontal, self)
-        self.text_edit_h.setPlainText(f"{'qwertyuiopasdfghjkl'*10}")
-        self.vlyt.addWidget(self.text_edit_h)
+        self.text_edit = PlainTextEdit(False, self)
+        self.text_edit.setPlainText(test_text)
+        self.vlyt.addWidget(self.text_edit)
+
+        self.smooth_text_edit = PlainTextEdit(True, self)
+        self.smooth_text_edit.setPlainText(test_text)
+        self.vlyt.addWidget(self.smooth_text_edit)
 
 
 if __name__ == "__main__":

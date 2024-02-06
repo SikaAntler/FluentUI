@@ -13,7 +13,7 @@ from .navigation import (
     PanelPosition,
 )
 from .radio_button import FRadioButton
-from .scroll_bar import FScrollBar
+from .scroll_bar import FScrollBar, FSmoothScrollBar
 from .slider import FSlider
 from .switch_button import FSwitchButton, IndicatorPosition
 from .tool_bar import FToolBar
