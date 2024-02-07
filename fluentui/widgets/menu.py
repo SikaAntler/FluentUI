@@ -2,28 +2,27 @@ from enum import Enum
 
 from PySide6.QtCore import (
     QEasingCurve,
-    QEvent,
     QModelIndex,
     QObject,
     QPersistentModelIndex,
     QPoint,
     QPropertyAnimation,
+    QRectF,
     QSize,
     Qt,
 )
 from PySide6.QtGui import (
-    QAction,
     QColor,
-    QCursor,
-    QHoverEvent,
+    QFontMetrics,
     QIcon,
+    QKeySequence,
     QPainter,
     QPen,
     QPixmap,
     QRegion,
 )
 from PySide6.QtWidgets import (
-    QApplication,
+    QGraphicsDropShadowEffect,
     QHBoxLayout,
     QListWidget,
     QListWidgetItem,
@@ -32,7 +31,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from ..utils import FStyleSheet, set_font
+from ..utils import FAction, FStyleSheet, get_screen_geometry, set_font
 
 
 class MenuAnimationType(Enum):
@@ -54,8 +53,10 @@ class MenuItemDelegate(QStyledItemDelegate):
         option: QStyleOptionViewItem,
         index: QModelIndex | QPersistentModelIndex,
     ) -> None:
+        super().paint(painter, option, index)
+
         if not self._is_seperator(index):
-            return super().paint(painter, option, index)
+            return
 
         painter.save()
 
@@ -68,40 +69,86 @@ class MenuItemDelegate(QStyledItemDelegate):
         painter.restore()
 
 
+class ShortcutMenuItemDelegate(MenuItemDelegate):
+    def paint(
+        self,
+        painter: QPainter,
+        option: QStyleOptionViewItem,
+        index: QModelIndex | QPersistentModelIndex,
+    ) -> None:
+        super().paint(painter, option, index),
+
+        if self._is_seperator(index):
+            return
+
+        action: FAction = index.data(Qt.ItemDataRole.UserRole)
+        # if not isinstance(action, QAction) or action.shortcut().isEmpty():
+        if action.shortcut().isEmpty():
+            print("Action does not have shortcut")
+            return
+
+        painter.save()
+
+        font = self.parent().font()
+        painter.setFont(font)
+        painter.setPen(QColor(0, 0, 0, 153))
+
+        fm = QFontMetrics(font)
+        shortcut = action.shortcut().toString(QKeySequence.SequenceFormat.NativeText)
+
+        sw = fm.boundingRect(shortcut).width() + 1  # +1是为了修正字被遮住了一点儿
+        painter.translate(option.rect.width() - sw - 20, 0)
+
+        rect = QRectF(0, option.rect.y(), sw, option.rect.height())
+        painter.drawText(
+            rect, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter, shortcut
+        )
+
+        painter.restore()
+
+
 class MenuActionListWidget(QListWidget):
     def __init__(self, parent) -> None:
         super().__init__(parent=parent)
 
         self.setViewportMargins(0, 6, 0, 6)
-
-        # 否则会有...出现
-        self.setTextElideMode(Qt.TextElideMode.ElideNone)
-
-        # 原代码是14，但MS只提供有12和16的，我觉得应该根据实际情况来
         self.setIconSize(QSize(16, 16))
-
-        # 丝滑滚动
-        self.setVerticalScrollMode(self.ScrollMode.ScrollPerPixel)
+        self.setTextElideMode(Qt.TextElideMode.ElideNone)  # 否则会有...出现
+        self.setDragEnabled(False)
+        self.setMouseTracking(True)
 
         # 否则会出现滚动条，但即使设置Off依然可以滚动
+        # self.setVerticalScrollMode(QListWidget.ScrollMode.ScrollPerPixel)
+        self.verticalScrollBar().setEnabled(False)
+        self.horizontalScrollBar().setEnabled(False)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
-        # 自定义委托
-        self.setItemDelegate(MenuItemDelegate(self))
+        self.setItemDelegate(ShortcutMenuItemDelegate(self))
 
-        set_font(self)
+        FStyleSheet.MENU.apply(self)
+        set_font(self, font_size=10)
 
     def addItem(self, item: QListWidgetItem) -> None:
         super().addItem(item)
         self.adjustSize()
 
+    def insertItem(self, row: int, item: QListWidgetItem) -> None:
+        super().insertItem(row, item)
+        self.adjustSize()
+
+    def takeItem(self, row: int) -> QListWidgetItem:
+        item = super().takeItem(row)
+        self.adjustSize()
+
+        return item
+
     def adjustSize(self) -> None:
-        size = QSize(0, 0)  # QSize() = QSize(-1, -1)
+        size = QSize(1, 1)
         for i in range(self.count()):
             s = self.item(i).sizeHint()
-            size.setWidth(max(size.width(), s.width()))
-            size.setHeight(size.height() + s.height())
+            size.setWidth(max(size.width(), s.width(), 1))
+            size.setHeight(max(size.height() + s.height(), 1))
 
         # self.viewport().adjustSize()
 
@@ -109,6 +156,7 @@ class MenuActionListWidget(QListWidget):
         size += QSize(
             margins.left() + margins.right() + 2, margins.top() + margins.bottom()
         )
+
         self.setFixedSize(size)
 
 
@@ -124,35 +172,29 @@ class FMenu(QWidget):
             | Qt.WindowType.FramelessWindowHint
             | Qt.WindowType.NoDropShadowWindowHint
         )
-
-        # self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-
-        self.view = MenuActionListWidget(self)
-
-        self.menu_layout = QHBoxLayout(self)
-        self.menu_layout.addWidget(self.view, 1, Qt.AlignmentFlag.AlignCenter)
-
-        # 决定了内部内容与鼠标之间的距离，原代码设置的很大，应该是为了动画
-        # P.S. self.contentsMargin与self.layout().contentsMargins是不同的
-        self.menu_layout.setContentsMargins(12, 8, 12, 20)
-        # self.menu_layout.setContentsMargins(0, 0, 0, 0)
-
         # 背景透明, 即使margins设置全0，因为圆角的缘故也会有背景色
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.setMouseTracking(True)
 
-        self._actions = []  # type: list[QAction]
+        self.hlyt = QHBoxLayout(self)
+        self.hlyt.setContentsMargins(12, 8, 12, 20)
+
+        self.view = MenuActionListWidget(self)
+        self.hlyt.addWidget(self.view, 1, Qt.AlignmentFlag.AlignCenter)
+
+        self.shadow_effect = QGraphicsDropShadowEffect(self.view)
+        self.shadow_effect.setBlurRadius(30)
+        self.shadow_effect.setOffset(0, 8)
+        self.shadow_effect.setColor(QColor(0, 0, 0, 30))
+        self.view.setGraphicsEffect(self.shadow_effect)
+
+        self._actions = []  # type: list[FAction]
 
         self._item_height = 28
 
         self.view.itemClicked.connect(self._on_item_clicked)
 
         self.ani_manager = None
-
-        FStyleSheet.MENU.apply(self)
-
-        # TODO: 增加对shortcut的支持，至少需要写：
-        #  1. ShortcutMenuItemDelegate
-        #  2. self._longest_shortcut_width函数
 
         # TODO: 增加SubMenu功能，需要写的比较多
 
@@ -164,10 +206,14 @@ class FMenu(QWidget):
         #  self.view.viewportMargins()=(0, 6, 0, 6) 这是初始化时设置的
         #  self.view.contentsMargins()=(1, 1, 1, 1) 这个又影响什么就不清楚了
 
-    def addAction(self, action: QAction) -> None:
+    def addAction(self, action: FAction) -> None:
         item = self._create_action_item(action)
         self.view.addItem(item)
         self.adjustSize()
+
+    def addActions(self, actions: list[FAction]) -> None:
+        for action in actions:
+            self.addAction(action)
 
     def addSeparator(self) -> None:
         margins = self.view.viewportMargins()
@@ -186,7 +232,13 @@ class FMenu(QWidget):
         height = self.view.height() + margins.top() + margins.bottom()
         self.setFixedSize(width, height)
 
-    def _create_action_item(self, action: QAction) -> QListWidgetItem:
+    def exec(self, pos: QPoint, ani_type=MenuAnimationType.NONE) -> None:
+        self.ani_manager = MenuAnimationManager.make(self, ani_type)
+        self.ani_manager.exec(pos)
+
+        self.show()
+
+    def _create_action_item(self, action: FAction) -> QListWidgetItem:
         self._actions.append(action)
 
         icon = self._create_item_icon(action)
@@ -199,45 +251,59 @@ class FMenu(QWidget):
         return item
 
     def _has_item_icon(self) -> bool:
-        return any(not i.icon().isNull() for i in self._actions)
+        return any(a.icon() is not None for a in self._actions)
 
-    def _create_item_icon(self, action: QAction) -> QIcon:
+    def _create_item_icon(self, action: FAction) -> QIcon:
         # 如果前面的action中有icon了，那么即使这个action没有也要给一个透明的
         # 如果前面都没有icon，那就给个空的
         # 但感觉有一点不合理，万一第一个没有，第二个又有了，此时第一个已经没法修改了
         if self._has_item_icon():
-            if action.icon().isNull():
+            if action.icon() is None:
                 pixmap = QPixmap(self.view.iconSize())
                 pixmap.fill(Qt.GlobalColor.transparent)
                 icon = QIcon(pixmap)
             else:
-                icon = action.icon()
+                icon = action.icon().icon()
         else:
             icon = QIcon()
 
         return icon
 
-    def _adjust_item_text(self, item: QListWidgetItem, action: QAction) -> None:
+    def _longest_shortcut_width(self) -> int:
+        longest_width = 0
+        for action in self._actions:
+            shortcut = action.shortcut().toString(
+                QKeySequence.SequenceFormat.NativeText
+            )
+            width = self.view.fontMetrics().boundingRect(shortcut).width()
+            longest_width = max(longest_width, width)
+
+        return longest_width
+
+    def _adjust_item_text(self, item: QListWidgetItem, action: FAction) -> int:
         # TODO: leave sine space for shortcut key
 
+        sw = self._longest_shortcut_width()
+        sw = sw + 22 if sw != 0 else 0
+
+        text = action.text()
+        fm = self.view.fontMetrics()
         if not self._has_item_icon():
-            item.setText(action.text())
-            # width = 40 + self.view.fontMetrics().boundingRect(action.text()).width()
-            width = 40 + self.view.fontMetrics().boundingRect(item.text()).width()
+            item.setText(text)
+            width = 40 + fm.boundingRect(text).width() + sw
         else:
-            item.setText(" " + action.text())
-            width = 60 + self.view.fontMetrics().boundingRect(item.text()).width()
+            item.setText(" " + text)
+            space = 4 - fm.boundingRect(" ").width()
+            width = 60 + fm.boundingRect(text).width() + sw + space
 
         item.setSizeHint(QSize(width, self._item_height))
 
-    def exec(self, pos: QPoint, ani_type=MenuAnimationType.NONE) -> None:
-        self.ani_manager = MenuAnimationManager.make(self, ani_type)
-        self.ani_manager.exec(pos)
-
-        self.show()
+        return width
 
     def _on_item_clicked(self, item: QListWidgetItem) -> None:
-        action: QAction = item.data(Qt.ItemDataRole.UserRole)
+        action: FAction = item.data(Qt.ItemDataRole.UserRole)
+        if action not in self._actions or not action.isEnabled():
+            return
 
         self.view.clearSelection()
         self.close()
@@ -256,8 +322,8 @@ class MenuAnimationManager(QObject):
 
         self.animation.setDuration(250)
         self.animation.setEasingCurve(QEasingCurve.Type.OutQuad)
-        self.animation.valueChanged.connect(self.on_value_changed)
-        self.animation.valueChanged.connect(self.update_menu_viewport)
+        self.animation.valueChanged.connect(self._on_value_changed)
+        self.animation.valueChanged.connect(self._update_menu_viewport)
 
     @classmethod
     def register(cls, name):
@@ -276,43 +342,44 @@ class MenuAnimationManager(QObject):
 
         return cls.managers[ani_type](menu)
 
-    def exec(self, pos: QPoint):
-        pass
+    def exec(self, pos: QPoint) -> None:
+        raise NotImplementedError
 
-    def _end_position(self, pos: QPoint):
+    def _end_position(self, pos: QPoint) -> QPoint:
         menu = self.menu
-        rect = QApplication.screenAt(QCursor.pos()).availableGeometry()
-        width, height = menu.width() + 5, menu.sizeHint().height()
-        x = min(pos.x() - menu.layout().contentsMargins().left(), rect.right() - width)
-        y = min(pos.y() - 4, rect.bottom() - height)
+        geometry = get_screen_geometry()
+        w, h = menu.width() + 5, menu.sizeHint().height()
+        x = min(pos.x() - menu.layout().contentsMargins().left(), geometry.right() - w)
+        y = min(pos.y() - 4, geometry.bottom() - h + 10)
+
         return QPoint(x, y)
 
-    def _menu_size(self):
+    def _menu_size(self) -> tuple[int, int]:
         margins = self.menu.layout().contentsMargins()
-        width = self.menu.view.width() + margins.left() + margins.right() + 120
-        height = self.menu.view.height() + margins.top() + margins.bottom() + 20
-        return width, height
+        w = self.menu.view.width() + margins.left() + margins.right() + 120
+        h = self.menu.view.height() + margins.top() + margins.bottom() + 20
 
-    def on_value_changed(self):
-        pass
+        return w, h
 
-    def update_menu_viewport(self) -> None:
+    def _on_value_changed(self) -> None:
+        raise NotImplementedError
+
+    def _update_menu_viewport(self) -> None:
         self.menu.view.viewport().update()
         self.menu.view.setAttribute(Qt.WidgetAttribute.WA_UnderMouse, True)
-        event = QHoverEvent(QEvent.Type.HoverEnter, QPoint(), QPoint(1, 1))
-        QApplication.sendEvent(self.menu.view, event)
+        # event = QHoverEvent(QEvent.Type.HoverEnter, QPoint(), QPoint(1, 1))
+        # QApplication.sendEvent(self.menu.view, event)
 
 
 @MenuAnimationManager.register(MenuAnimationType.NONE)
 class MenuAnimationManagerNone(MenuAnimationManager):
-    def exec(self, pos: QPoint):
-        # self.menu.move(pos)
+    def exec(self, pos: QPoint) -> None:
         self.menu.move(self._end_position(pos))
 
 
 @MenuAnimationManager.register(MenuAnimationType.DROP_DOWN)
 class MenuAnimationManagerDropDown(MenuAnimationManager):
-    def exec(self, pos: QPoint):
+    def exec(self, pos: QPoint) -> None:
         pos = self._end_position(pos)
         height = self.menu.height() + 5
 
@@ -320,7 +387,7 @@ class MenuAnimationManagerDropDown(MenuAnimationManager):
         self.animation.setEndValue(pos)
         self.animation.start()
 
-    def on_value_changed(self):
+    def _on_value_changed(self) -> None:
         width, height = self._menu_size()
         y = self.animation.endValue().y() - self.animation.currentValue().y()
         self.menu.setMask(QRegion(0, y, width, height))

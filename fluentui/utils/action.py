@@ -10,7 +10,7 @@ class FAction(QAction):
         self._icon = icon
         self._text = text
 
-    def icon(self) -> Icon:
+    def icon(self) -> Icon | None:
         return self._icon
 
     def setIcon(self, icon: Icon) -> None:
