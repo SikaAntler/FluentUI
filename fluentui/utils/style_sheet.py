@@ -28,6 +28,7 @@ class FStyleSheet(StyleSheet, Enum):
     MENU = "menu"
     NAVIGATION = "navigation"
     RADIO_BUTTON = "radio_button"
+    TOOL_TIP = "tool_tip"
     WINDOW = "window"
 
     def path(self) -> str:

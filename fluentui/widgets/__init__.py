@@ -17,5 +17,6 @@ from .scroll_bar import FScrollBar, FSmoothScrollBar
 from .slider import FSlider
 from .switch_button import FSwitchButton, IndicatorPosition
 from .tool_bar import FToolBar
+from .tool_tip import FToolTip, FToolTipFilter, ToolTipPosition
 from .widget import FWidget
 from .window import FMainWindow

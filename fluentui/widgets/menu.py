@@ -336,9 +336,9 @@ class MenuAnimationManager(QObject):
         return wrapper
 
     @classmethod
-    def make(cls, menu: FMenu, ani_type: MenuAnimationType):
+    def make(cls, menu: FMenu, ani_type: MenuAnimationType) -> "MenuAnimationManager":
         if ani_type not in cls.managers:
-            raise ValueError(f"`{ani_type}` is not an invalid menu animation type.")
+            raise ValueError(f"`{ani_type}` is an invalid menu animation type")
 
         return cls.managers[ani_type](menu)
 
@@ -372,13 +372,13 @@ class MenuAnimationManager(QObject):
 
 
 @MenuAnimationManager.register(MenuAnimationType.NONE)
-class MenuAnimationManagerNone(MenuAnimationManager):
+class MenuAnimationNone(MenuAnimationManager):
     def exec(self, pos: QPoint) -> None:
         self.menu.move(self._end_position(pos))
 
 
 @MenuAnimationManager.register(MenuAnimationType.DROP_DOWN)
-class MenuAnimationManagerDropDown(MenuAnimationManager):
+class MenuAnimationDropDown(MenuAnimationManager):
     def exec(self, pos: QPoint) -> None:
         pos = self._end_position(pos)
         height = self.menu.height() + 5

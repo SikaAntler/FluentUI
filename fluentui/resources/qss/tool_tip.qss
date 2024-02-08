@@ -1,0 +1,15 @@
+FToolTip {
+    border-radius: 4px;
+}
+
+FToolTip>#container {
+    background-color: rgb(243, 243, 243);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 4px;
+}
+
+FToolTip>#label {
+    background-color: transparent;
+    border: none;
+    color: black;
+}

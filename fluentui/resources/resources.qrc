@@ -53,6 +53,7 @@
         <file>qss/menu.qss</file>
         <file>qss/navigation.qss</file>
         <file>qss/radio_button.qss</file>
+        <file>qss/tool_tip.qss</file>
         <file>qss/window.qss</file>
     </qresource>
 </RCC>
