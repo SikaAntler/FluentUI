@@ -1,0 +1,24 @@
+SettingCard>QLabel {
+    color: black;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+}
+
+SettingCard>QLabel#lbl_content {
+    color: rgb(96, 96, 96);
+}
+
+SettingCard>QLabel:disabled {
+    color: rgba(0, 0, 0, 0.36);
+}
+
+SettingCardGroup {
+    background-color: transparent;
+}
+
+SettingCardGroup>QLabel {
+    background-color: transparent;
+    color: black;
+    border: none;
+}

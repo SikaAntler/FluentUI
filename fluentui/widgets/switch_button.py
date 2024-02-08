@@ -151,8 +151,8 @@ class FSwitchButton(QWidget):
                 self.hlyt.addWidget(self._label, 0)
                 self.hlyt.setAlignment(Qt.AlignmentFlag.AlignLeft)
             else:
-                self.hlyt.addWidget(self._indicator, 0)
                 self.hlyt.addWidget(self._label, 0)
+                self.hlyt.addWidget(self._indicator, 0)
                 self.hlyt.setAlignment(Qt.AlignmentFlag.AlignRight)
         else:
             self.hlyt.addWidget(self._indicator)

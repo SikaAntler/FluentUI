@@ -85,6 +85,7 @@ class FIcon(Icon, Enum):
     SERIAL_PORT = "serial_port"
     SETTINGS = "settings"
     SQUARE = "square"
+    TEXT = "text"
     ZOOM_FIT = "zoom_fit"
     ZOOM_IN = "zoom_in"
     ZOOM_OUT = "zoom_out"

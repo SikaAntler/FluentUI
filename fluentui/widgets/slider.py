@@ -92,6 +92,8 @@ class FSlider(QSlider):
         self._handle.released.connect(self.sliderReleased)
         self.valueChanged.connect(self._adjust_handle_pos)
 
+        # TODO: disabled状态
+
     def mousePressEvent(self, event: QMouseEvent) -> None:
         self.setValue(self._pos_to_value(event.position()))
 

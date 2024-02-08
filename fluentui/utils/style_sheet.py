@@ -28,6 +28,7 @@ class FStyleSheet(StyleSheet, Enum):
     MENU = "menu"
     NAVIGATION = "navigation"
     RADIO_BUTTON = "radio_button"
+    SETTING_CARD = "setting_card"
     TOOL_TIP = "tool_tip"
     WINDOW = "window"
 

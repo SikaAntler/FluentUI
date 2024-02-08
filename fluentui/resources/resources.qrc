@@ -42,6 +42,7 @@
         <file alias="serial_port">icons/ic_fluent_serial_port_24_regular.svg</file>
         <file alias="settings">icons/ic_fluent_settings_24_regular.svg</file>
         <file alias="square">icons/ic_fluent_square_24_regular.svg</file>
+        <file alias="text">icons/ic_fluent_text_32_regular.svg</file>
         <file alias="zoom_fit">icons/ic_fluent_zoom_fit_24_regular.svg</file>
         <file alias="zoom_in">icons/ic_fluent_zoom_in_24_regular.svg</file>
         <file alias="zoom_out">icons/ic_fluent_zoom_out_24_regular.svg</file>
@@ -53,6 +54,7 @@
         <file>qss/menu.qss</file>
         <file>qss/navigation.qss</file>
         <file>qss/radio_button.qss</file>
+        <file>qss/setting_card.qss</file>
         <file>qss/tool_tip.qss</file>
         <file>qss/window.qss</file>
     </qresource>
