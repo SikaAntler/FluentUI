@@ -27,7 +27,7 @@ class TestEdit(QMainWindow):
         self.line_edit.setPlaceholderText("请输入标签")
         self.glyt.addWidget(self.line_edit, 0, 0, 1, 1)
 
-        self.btn_search = FPushButton(text="搜索")
+        self.btn_search = FPushButton("搜索", self)
         self.glyt.addWidget(self.btn_search, 0, 1, 1, 1)
 
         test_text = [ascii_uppercase * 3]
@@ -42,7 +42,7 @@ class TestEdit(QMainWindow):
         self.text_edit.setPlainText(test_text)
         self.glyt.addWidget(self.text_edit, 1, 0, 1, 2)
 
-        self.btn_edit = FPushButton(text="编辑", parent=self)
+        self.btn_edit = FPushButton("编辑", self)
         self.glyt.addWidget(self.btn_edit, 2, 0, 1, 2)
 
 

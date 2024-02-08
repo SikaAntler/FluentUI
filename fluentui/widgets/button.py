@@ -1,6 +1,4 @@
-from typing import Optional
-
-from PySide6.QtCore import QEvent, QRect, QSize, Qt
+from PySide6.QtCore import QEvent, QRectF, QSize
 from PySide6.QtGui import (
     QEnterEvent,
     QIcon,
@@ -10,34 +8,38 @@ from PySide6.QtGui import (
 )
 from PySide6.QtWidgets import QPushButton, QToolButton
 
-from ..utils import FStyleSheet, Icon, set_font
+from ..utils import FStyleSheet, Icon, draw_icon, set_font
 
 
 class FPushButton(QPushButton):
     def __init__(
-        self, icon: Optional[QIcon] = None, text: Optional[str] = None, parent=None
+        self,
+        text: str = "",
+        parent=None,
+        icon: QIcon | Icon = None,
     ) -> None:
-        super().__init__(parent=parent)
+        super().__init__(text=text, parent=parent)
 
-        self._icon = icon or QIcon()
-        self.setIconSize(QSize(20, 20))
-
+        self._icon = icon
         self.setIcon(icon)
-        if text is not None:
-            self.setText(text)
+        self.setIconSize(QSize(20, 20))
 
         self._is_hover = False
         self._is_pressed = False
 
-        set_font(self)
         FStyleSheet.BUTTON.apply(self)
+        set_font(self)
 
     def enterEvent(self, event: QEnterEvent) -> None:
         self._is_hover = True
         super().enterEvent(event)
 
-    def icon(self) -> QIcon:
+    def icon(self) -> QIcon | Icon | None:
         return self._icon
+
+    def setIcon(self, icon: QIcon | Icon) -> None:
+        self._icon = icon
+        self.setProperty("hasIcon", icon is not None)
 
     def leaveEvent(self, event: QEnterEvent) -> None:
         self._is_hover = False
@@ -55,7 +57,7 @@ class FPushButton(QPushButton):
         # TODO: super必须要在绘制icon前，否则icon颜色不正常
         super().paintEvent(event)
 
-        if self._icon:
+        if self._icon is not None:
             painter = QPainter(self)
             painter.setRenderHints(
                 QPainter.RenderHint.Antialiasing
@@ -68,15 +70,11 @@ class FPushButton(QPushButton):
                 painter.setOpacity(0.786)
 
             w, h = self.iconSize().toTuple()
-            y = (self.height() - h) // 2
+            y = (self.height() - h) / 2
             mw = self.minimumSizeHint().width()
             # TODO: 为什么要判断mw>0，在特殊情况下真实尺寸有可能小于SizeHint？
-            x = 12 + (self.width() - mw) // 2 if mw > 0 else 12
-            self._icon.paint(painter, QRect(x, y, w, h), Qt.AlignmentFlag.AlignCenter)
-
-    def setIcon(self, icon: QIcon) -> None:
-        self._icon = icon or QIcon()
-        self.setProperty("hasIcon", icon is not None)
+            x = 12 + (self.width() - mw) / 2 if mw > 0 else 12
+            draw_icon(self._icon, painter, QRectF(x, y, w, h))
 
 
 class ToolButton(QToolButton):
@@ -92,21 +90,21 @@ class ToolButton(QToolButton):
 
         self._post_init()
 
-        set_font(self)
         FStyleSheet.BUTTON.apply(self)
+        set_font(self)
+
+    def icon(self) -> Icon:
+        return self._icon
 
     def setIcon(self, icon: Icon) -> None:
         self._icon = icon
         self.update()
 
-    def icon(self) -> Icon:
-        return self._icon
+    def text(self) -> str:
+        return self._text
 
     def setText(self, text: str) -> None:
         self._text = text
-
-    def text(self) -> str:
-        return self._text
 
     def enterEvent(self, event: QEnterEvent) -> None:
         self._is_hover = True
