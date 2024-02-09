@@ -442,6 +442,18 @@ class FSmoothScrollBar(FScrollBar):
         parent.viewport().installEventFilter(self)
         self.installEventFilter(self)
 
+    def scrollRate(self) -> int:
+        if self._orientation == Qt.Orientation.Vertical:
+            return self._vertical_scroll_rate
+        else:
+            return self._horizontal_scroll_rate
+
+    def setScrollRate(self, rate: int) -> None:
+        if self._orientation == Qt.Orientation.Vertical:
+            self._vertical_scroll_rate = rate
+        else:
+            self._horizontal_scroll_rate = rate
+
     def scrollByValue(self, dv: int) -> None:
         self.animation.stop()
 

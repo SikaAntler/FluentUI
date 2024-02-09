@@ -1,17 +1,19 @@
 from PySide6.QtCore import QEvent, QModelIndex, Qt
 from PySide6.QtGui import QKeyEvent, QMouseEvent, QPainter, QResizeEvent
 from PySide6.QtWidgets import (
+    QAbstractItemView,
     QListWidget,
     QListWidgetItem,
     QStyleOptionViewItem,
 )
 
-from ..utils import FStyleSheet, ThemeColor
+from ..utils import FStyleSheet, ThemeColor, set_font
+from .scroll_bar import FSmoothScrollBar
 from .table_view import TableItemDelegate
 
 
 class ListItemDelegate(TableItemDelegate):
-    def __init__(self, parent: QListWidget):
+    def __init__(self, parent: QAbstractItemView):
         super().__init__(parent=parent)
 
     def _draw_background(
@@ -35,6 +37,9 @@ class FListWidget(QListWidget):
         self._delegate = ListItemDelegate(self)
         self.setItemDelegate(self._delegate)
 
+        self.scroll_bar_v = FSmoothScrollBar(Qt.Orientation.Vertical, self)
+        self.scroll_bar_h = FSmoothScrollBar(Qt.Orientation.Horizontal, self)
+
         self._is_select_right_clicked_row = False
 
         self.setMouseTracking(True)
@@ -43,6 +48,7 @@ class FListWidget(QListWidget):
         self.pressed.connect(lambda i: self._set_pressed_row(i.row()))
 
         FStyleSheet.LIST_VIEW.apply(self)
+        set_font(self)
 
     def clearSelection(self) -> None:
         super().clearSelection()

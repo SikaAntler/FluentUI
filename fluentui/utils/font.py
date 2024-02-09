@@ -17,7 +17,7 @@ class FFont:
 
 def get_font(
     mono: bool = False,
-    font_size: float = 12,
+    font_size: float = 10.5,
     weight: QFont.Weight = QFont.Weight.Normal,
     italic: bool = False,
 ) -> QFont:

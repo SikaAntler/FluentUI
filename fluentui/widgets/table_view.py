@@ -1,12 +1,16 @@
 from PySide6.QtCore import QMargins, QModelIndex, QSize, Qt
 from PySide6.QtGui import QColor, QPainter, QPalette
-from PySide6.QtWidgets import QStyledItemDelegate, QStyleOptionViewItem
+from PySide6.QtWidgets import (
+    QAbstractItemView,
+    QStyledItemDelegate,
+    QStyleOptionViewItem,
+)
 
-from ..utils import ThemeColor, get_font
+from ..utils import ThemeColor
 
 
 class TableItemDelegate(QStyledItemDelegate):
-    def __init__(self, parent=None):
+    def __init__(self, parent: QAbstractItemView):
         super().__init__(parent=parent)
 
         self._margin = 2
@@ -40,7 +44,7 @@ class TableItemDelegate(QStyledItemDelegate):
     def initStyleOption(self, option: QStyleOptionViewItem, index: QModelIndex) -> None:
         super().initStyleOption(option, index)
 
-        option.font = index.data(Qt.ItemDataRole.FontRole) or get_font(font_size=12)
+        option.font = index.data(Qt.ItemDataRole.FontRole) or self.parent().font()
 
         text_color = QColor("black")
         text_brush = index.data(Qt.ItemDataRole.ForegroundRole)

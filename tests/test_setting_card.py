@@ -22,9 +22,12 @@ class Settings(QScrollArea):
         self.resize(400, 400)
 
         self.scroll_bar_v = FSmoothScrollBar(Qt.Orientation.Vertical, self)
+        self.scroll_bar_v.setScrollRate(60)
         self.scroll_bar_h = FSmoothScrollBar(Qt.Orientation.Horizontal, self)
 
         self.widget_scroll = QWidget()
+        self.setWidget(self.widget_scroll)
+        self.setWidgetResizable(True)
         self.setViewportMargins(20, 20, 20, 20)
 
         self.vlyt = QVBoxLayout(self.widget_scroll)
@@ -64,9 +67,6 @@ class Settings(QScrollArea):
         self.card_draw_label_size = SliderSettingCard(FIcon.DRAW_TEXT, "绘制字体大小")
         self.card_draw_label_size.slider.setFixedWidth(150)
         self.group_draw_label.addSettingCard(self.card_draw_label_size)
-
-        self.setWidget(self.widget_scroll)
-        self.setWidgetResizable(True)
 
         self.card_select_folder.clicked.connect(self.on_card_select_folder_clicked)
         self.card_auto_open_camera.checkedChanged.connect(
