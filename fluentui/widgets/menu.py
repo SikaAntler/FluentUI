@@ -127,7 +127,7 @@ class MenuActionListWidget(QListWidget):
         self.setItemDelegate(ShortcutMenuItemDelegate(self))
 
         FStyleSheet.MENU.apply(self)
-        set_font(self, font_size=10)
+        set_font(self, font_size=9)
 
     def addItem(self, item: QListWidgetItem) -> None:
         super().addItem(item)

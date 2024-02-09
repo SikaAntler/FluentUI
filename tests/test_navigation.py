@@ -77,7 +77,7 @@ class InterfaceWidget(QFrame):
         self.lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.hlyt.addWidget(self.lbl, Qt.AlignmentFlag.AlignCenter)
         self.setObjectName(text.replace(" ", "_"))
-        set_font(self.lbl, font_size=40)
+        set_font(self.lbl, font_size=39)
 
 
 class TestInterface(FramelessMainWindow):

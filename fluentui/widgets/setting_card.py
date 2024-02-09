@@ -60,7 +60,7 @@ class SettingCard(QWidget):
 
         self.lbl_title = QLabel(title, self)
         self.lbl_title.setObjectName("lbl_title")
-        set_font(self.lbl_title, font_size=11)
+        set_font(self.lbl_title)
         self.vlyt.addWidget(self.lbl_title, 0, Qt.AlignmentFlag.AlignLeft)
 
         self.lbl_content = QLabel(content, self)
@@ -109,7 +109,7 @@ class PushSettingCard(SettingCard):
         super().__init__(icon=icon, title=title, content=content, parent=parent)
 
         self.btn = FPushButton(text, self)
-        set_font(self.btn, font_size=10)
+        set_font(self.btn)
         self.hlyt.addWidget(self.btn, 0, Qt.AlignmentFlag.AlignRight)
         self.hlyt.addSpacing(16)
         self.btn.clicked.connect(self.clicked)
@@ -154,6 +154,7 @@ class SliderSettingCard(SettingCard):
         super().__init__(icon=icon, title=title, content=content, parent=parent)
 
         self.lbl_value = QLabel(self)
+        set_font(self.lbl_value, font_size=10.5)
         self.hlyt.addWidget(self.lbl_value, 0, Qt.AlignmentFlag.AlignRight)
         self.hlyt.addSpacing(6)
 
@@ -186,7 +187,7 @@ class SettingCardGroup(QWidget):
         self.vlyt.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.lbl_title = QLabel(title, self)
-        set_font(self.lbl_title, font_size=16)
+        set_font(self.lbl_title, font_size=15)
         self.vlyt.addWidget(self.lbl_title, Qt.AlignmentFlag.AlignLeft)
         self.vlyt.addSpacing(12)
 

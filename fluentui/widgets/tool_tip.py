@@ -51,7 +51,7 @@ class FToolTip(QWidget):
         self.label = QLabel(text, self)
         self.label.setObjectName("label")
         self.hlyt_container.addWidget(self.label)
-        set_font(self.label, font_size=10)
+        set_font(self.label, font_size=9)
 
         self.animation = QPropertyAnimation(self, b"windowOpacity", self)
         self.animation.setDuration(150)

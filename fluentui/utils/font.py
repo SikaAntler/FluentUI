@@ -17,7 +17,7 @@ class FFont:
 
 def get_font(
     mono: bool = False,
-    font_size: int = 14,
+    font_size: float = 12,
     weight: QFont.Weight = QFont.Weight.Normal,
     italic: bool = False,
 ) -> QFont:
@@ -35,11 +35,8 @@ def get_font(
     else:
         raise ValueError("Unknown operating system")
 
-    font = QFont(families, font_size, weight, italic)
-    # font.setFamilies(families)
-    # font.setPixelSize(14)
-    # font.setWeight(weight)
-    # font.setItalic(italic)
+    font = QFont(families, weight=weight, italic=italic)
+    font.setPointSizeF(font_size)
 
     return font
 
@@ -47,8 +44,17 @@ def get_font(
 def set_font(
     widget: QWidget,
     mono: bool = False,
-    font_size: int = 12,
+    font_size: float = 10.5,
     weight: QFont.Weight = QFont.Weight.Normal,
     italic: bool = False,
 ) -> None:
+    """设置字体
+
+    P.S. 为了适配不同缩放比例，选择pointSizeF来表示字体大小
+    pointSize->pixelSize计算公式为：pointSize * 96 / 72 = pixelSize
+    为了使最终字体笔画匀称，应确保pixelSize的值为整数，一下使是常用的pointSizeF值：
+    9 -> 12px, 10.5 -> 14px, 12 -> 16px, 13.5 -> 18px, 15 -> 20px
+
+    """
+
     widget.setFont(get_font(mono, font_size, weight, italic))

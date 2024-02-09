@@ -141,6 +141,7 @@ class FSwitchButton(QWidget):
         self._text_off = "关"
         self._text_on = "开"
         self._label = QLabel(self._text_off)
+        set_font(self._label)
 
         self.hlyt = QHBoxLayout(self)
         self.hlyt.setContentsMargins(0, 0, 0, 0)
@@ -160,7 +161,6 @@ class FSwitchButton(QWidget):
 
         # self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground)
         self.setFixedHeight(22)
-        set_font(self)
 
         self._indicator.toggled.connect(self._switch_text)
         self._indicator.toggled.connect(self.on_indicator_toggled)
