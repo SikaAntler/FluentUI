@@ -1,5 +1,4 @@
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import (
     QApplication,
     QDialog,
@@ -15,22 +14,21 @@ from fluentui.framesless import (
     FramelessMainWindow,
     FramelessWidget,
 )
+from fluentui.utils import move_to_screen_center
 
 
 class Widget(FramelessWidget):
     def __init__(self, parent=None) -> None:
         super().__init__(parent=parent)
 
-        self.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
-        self.update_frameless()
-
-        self.title_bar.setDoubleClickedEnabled(False)
-
-        # self.setAttribute(Qt.WidgetAttribute.WA_QuitOnClose)
-
         self.setWindowTitle("Frameless Widget")
         self.resize(400, 300)
+        move_to_screen_center(self)
 
+        self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint)
+        self.update_frameless()
+
+        self.setAttribute(Qt.WidgetAttribute.WA_QuitOnClose, False)
         self.title_bar.btn_close.clicked.disconnect(self.close)
         self.title_bar.btn_close.clicked.connect(self.hide)
 
@@ -41,8 +39,6 @@ class Dialog(FramelessDialog):
 
         self.setWindowTitle("Frameless Dialog")
         self.resize(400, 300)
-
-        # self.title_bar.btn_close.clicked.disconnect(self.close)
 
         self.vlyt = QVBoxLayout(self)
 
@@ -58,9 +54,9 @@ class MainWindow(FramelessMainWindow):
 
         self.setWindowTitle("Frameless Main Window")
         self.resize(1187, 667)
+        move_to_screen_center(self)
 
         self.widget_central = QWidget(self)
-        self.widget_central.setMouseTracking(True)
         self.setCentralWidget(self.widget_central)
         self.hlyt = QHBoxLayout(self.widget_central)
 
@@ -85,9 +81,6 @@ class MainWindow(FramelessMainWindow):
             print("Accepted")
         else:
             print("Rejected")
-
-    def closeEvent(self, event: QCloseEvent) -> None:
-        self.frameless_widget.close()
 
 
 if __name__ == "__main__":

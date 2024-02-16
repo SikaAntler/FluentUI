@@ -1,4 +1,4 @@
-from PySide6.QtCore import QPointF, Qt
+from PySide6.QtCore import QEvent, QObject, QPointF, Qt
 from PySide6.QtGui import QIcon, QMouseEvent
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QWidget
 
@@ -12,8 +12,6 @@ class TitleBarBase(QWidget):
 
         # 需要此设置，否则background-color无效
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground)
-
-        self.setMouseTracking(True)
 
         self._double_clicked_enabled = True
 
@@ -32,36 +30,36 @@ class TitleBarBase(QWidget):
         self.btn_maximize.clicked.connect(self._toggle_maximize)
         self.btn_close.clicked.connect(self.window().close)
 
-        set_font(self)
+        self.window().installEventFilter(self)
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
         if self._allow_move(event.position()):
             self.window().windowHandle().startSystemMove()
 
-        super().mousePressEvent(event)
-
     def mouseDoubleClickEvent(self, event: QMouseEvent) -> None:
         if event.button() == Qt.MouseButton.LeftButton and self._double_clicked_enabled:
             self._toggle_maximize()
 
-        super().mouseDoubleClickEvent(event)
+    def setDoubleClickedEnabled(self, enabled: bool) -> None:
+        self._double_clicked_enabled = enabled
 
-    def _toggle_maximize(self) -> None:
-        is_max = self.window().isMaximized()
-        if is_max:
-            self.window().showNormal()
-        else:
-            self.window().showMaximized()
-        self.btn_maximize.set_max_state(not is_max)
+    def eventFilter(self, watched: QObject, event: QEvent) -> bool:
+        if watched is self.window() and event.type() == QEvent.Type.WindowStateChange:
+            self.btn_maximize.set_max_state(self.window().isMaximized())
 
-    def setDoubleClickedEnabled(self, is_enabled: bool) -> None:
-        self._double_clicked_enabled = is_enabled
+        return super().eventFilter(watched, event)
 
     def _allow_move(self, pos: QPointF) -> bool:
         # for btn in self.findChildren(TitleBarButton):
         #     if btn.isPressed():
         #         return False
         return True
+
+    def _toggle_maximize(self) -> None:
+        if self.window().isMaximized():
+            self.window().showNormal()
+        else:
+            self.window().showMaximized()
 
 
 class TitleBar(TitleBarBase):
@@ -110,6 +108,7 @@ class TitleBar(TitleBarBase):
         self.window().windowIconChanged.connect(self.setIcon)
 
         self.title = QLabel(self)
+        set_font(self.title)
         self.hlyt_info.addWidget(self.title)
         self.window().windowTitleChanged.connect(self.setTitle)
 

@@ -27,9 +27,6 @@ class TitleBarButton(QAbstractButton):
 
         self._state = TitleBarButtonState.NORMAL
 
-        # difference ratio for high DPI screen
-        # self._ratio = self.devicePixelRatio()
-
         # background color
         self._normal_bg_color = QColor(0, 0, 0, 0)
         self._hover_bg_color = QColor(0, 0, 0, 26)
@@ -48,10 +45,15 @@ class TitleBarButton(QAbstractButton):
         self._set_state(TitleBarButtonState.NORMAL)
         super().leaveEvent(event)
 
-    def mousePressEvent(self, e: QMouseEvent) -> None:
-        if e.button() == Qt.MouseButton.LeftButton:
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
             self._set_state(TitleBarButtonState.PRESSED)
-        super().mousePressEvent(e)
+        super().mousePressEvent(event)
+
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
+            self._set_state(TitleBarButtonState.NORMAL)
+        super().mouseReleaseEvent(event)
 
     def isPressed(self) -> bool:
         return self._state == TitleBarButtonState.PRESSED
@@ -126,6 +128,9 @@ class MaximizeButton(TitleBarButton):
             painter.drawPath(path)
 
     def set_max_state(self, is_max: bool) -> None:
+        if self._is_max == is_max:
+            return
+
         self._is_max = is_max
         self._set_state(TitleBarButtonState.NORMAL)
 
