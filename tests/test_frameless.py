@@ -29,8 +29,10 @@ class Widget(FramelessWidget):
         self.update_frameless()
 
         self.setAttribute(Qt.WidgetAttribute.WA_QuitOnClose, False)
-        self.title_bar.btn_close.clicked.disconnect(self.close)
-        self.title_bar.btn_close.clicked.connect(self.hide)
+
+        # 不能用hide，否则第二次打开时会出现闪烁位移
+        # self.title_bar.btn_close.clicked.disconnect(self.close)
+        # self.title_bar.btn_close.clicked.connect(self.hide)
 
 
 class Dialog(FramelessDialog):
@@ -73,7 +75,10 @@ class MainWindow(FramelessMainWindow):
         self.btn_show_dialog.clicked.connect(self.on_btn_show_dialog_clicked)
 
     def on_btn_show_widget_clicked(self) -> None:
-        self.frameless_widget.setVisible(not self.frameless_widget.isVisible())
+        if self.frameless_widget.isVisible():
+            self.frameless_widget.close()
+        else:
+            self.frameless_widget.show()
 
     def on_btn_show_dialog_clicked(self) -> None:
         dialog_code = self.frameless_dialog.exec()
@@ -85,6 +90,7 @@ class MainWindow(FramelessMainWindow):
 
 if __name__ == "__main__":
     app = QApplication()
+    # app.setAttribute(Qt.ApplicationAttribute.AA_DontCreateNativeWidgetSiblings)
     win = MainWindow()
     win.show()
     app.exec()

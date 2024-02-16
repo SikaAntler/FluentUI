@@ -1,10 +1,24 @@
-from ctypes import POINTER, Structure, c_int, windll
+from ctypes import POINTER, Structure, byref, c_int, windll
 from ctypes.wintypes import HWND, RECT, UINT
 
 import win32con
 import win32gui
 
 from ..utils import get_screen_geometry
+
+
+def add_window_animation(hWnd: int) -> None:
+    style = win32gui.GetWindowLong(hWnd, win32con.GWL_STYLE)
+    win32gui.SetWindowLong(
+        hWnd,
+        win32con.GWL_STYLE,
+        style
+        | win32con.WS_MINIMIZEBOX
+        | win32con.WS_MAXIMIZEBOX
+        | win32con.CS_DBLCLKS
+        | win32con.WS_THICKFRAME
+        | win32con.WS_CAPTION,
+    )
 
 
 class PWINDOWPOS(Structure):
@@ -57,3 +71,28 @@ def get_resize_border_thickness(hWnd: int, horizontal: bool):
     thickness_1 = get_system_metrics(hWnd, 92)
 
     return thickness_0 + thickness_1
+
+
+def dwm_is_composition_enabled() -> bool:
+    b_result = c_int(0)
+    windll.dwmapi.DwmIsCompositionEnabled(byref(b_result))
+
+    return bool(b_result.value)
+
+
+class MARGINS(Structure):
+    _fields_ = [
+        ("cxLeftWidth", c_int),
+        ("cxRightWidth", c_int),
+        ("cyToopHeight", c_int),
+        ("cyBottomHeight", c_int),
+    ]
+
+
+def add_shadow_effect(hWnd: int) -> None:
+    if not dwm_is_composition_enabled():
+        print("DWM composition is disabled")
+        return
+
+    margins = MARGINS(-1, -1, -1, -1)
+    windll.dwmapi.DwmExtendFrameIntoClientArea(hWnd, byref(margins))

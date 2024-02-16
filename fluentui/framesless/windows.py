@@ -2,14 +2,15 @@ from ctypes import cast
 from ctypes.wintypes import LPRECT, MSG
 
 import win32con
-import win32gui
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QCursor, QResizeEvent
+from PySide6.QtGui import QCursor, QResizeEvent, QShowEvent
 from PySide6.QtWidgets import QDialog, QMainWindow, QWidget
 
 from .title_bar import TitleBar
 from .win32_utils import (
     LPNCCALCSIZE_PARAMS,
+    add_shadow_effect,
+    add_window_animation,
     get_resize_border_thickness,
     is_fullscreen,
     is_maximized,
@@ -28,22 +29,14 @@ class FramelessHelper:
 
         self._enable_resize = True
 
-    def add_window_animation(self) -> None:
-        style = win32gui.GetWindowLong(self.winId(), win32con.GWL_STYLE)
-        win32gui.SetWindowLong(
-            self.winId(),
-            win32con.GWL_STYLE,
-            style
-            | win32con.WS_MINIMIZEBOX
-            | win32con.WS_MAXIMIZEBOX
-            | win32con.CS_DBLCLKS
-            | win32con.WS_THICKFRAME
-            | win32con.WS_CAPTION,
-        )
+    def showEvent(self, event: QShowEvent) -> None:
+        # 调用close后效果会消失
+        add_window_animation(self.winId())
+        add_shadow_effect(self.winId())
+        super().showEvent(event)
 
     def update_frameless(self) -> None:
         self.setWindowFlags(self.windowFlags() | Qt.WindowType.FramelessWindowHint)
-        self.add_window_animation()
 
     def nativeEvent(self, eventType, message: int) -> tuple[bool, int]:
         msg = MSG.from_address(int(message))
@@ -106,7 +99,6 @@ class FramelessHelper:
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.title_bar.resize(self.width(), self.title_bar.height())
-
         super().resizeEvent(event)
 
 
