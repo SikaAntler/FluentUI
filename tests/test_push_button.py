@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (
 )
 
 from fluentui.utils import FIcon
-from fluentui.widgets import FPushButton
+from fluentui.widgets import FPushButton, PrimaryPushButton
 
 
 class MainWindow(QMainWindow):
@@ -18,20 +18,29 @@ class MainWindow(QMainWindow):
 
         self.widget_central = QWidget()
         self.setCentralWidget(self.widget_central)
-        self.glyt_main = QGridLayout(self.widget_central)
+        self.glyt = QGridLayout(self.widget_central)
 
-        self.button_add = QPushButton("新建", self, FIcon.ADD.icon())
-        self.glyt_main.addWidget(self.button_add, 0, 0)
+        self.btn_add = QPushButton("新建", self, FIcon.ADD.icon())
+        self.glyt.addWidget(self.btn_add, 0, 0)
 
-        self.button_delete = FPushButton("删除", self, FIcon.DELETE.icon())
-        self.glyt_main.addWidget(self.button_delete, 0, 1)
+        self.btn_delete = FPushButton("删除", self, FIcon.DELETE.icon())
+        self.glyt.addWidget(self.btn_delete, 0, 1)
 
-        self.button_last = FPushButton("上一个", self, FIcon.ARROW_CIRCLE_UP)
-        self.button_last.setEnabled(False)
-        self.glyt_main.addWidget(self.button_last, 1, 0)
+        self.btn_last = FPushButton("上一个", self, FIcon.ARROW_CIRCLE_UP)
+        self.btn_last.setEnabled(False)
+        self.glyt.addWidget(self.btn_last, 1, 0)
 
-        self.button_next = FPushButton("下一个", self)
-        self.glyt_main.addWidget(self.button_next, 1, 1)
+        self.btn_next = FPushButton("下一个", self)
+        self.glyt.addWidget(self.btn_next, 1, 1)
+
+        self.btn_primary_last = PrimaryPushButton("上一个", self, FIcon.ARROW_CIRCLE_UP)
+        self.btn_primary_last.setEnabled(False)
+        self.glyt.addWidget(self.btn_primary_last)
+
+        self.btn_primary_next = PrimaryPushButton(
+            "下一个", self, FIcon.ARROW_CIRCLE_DOWN
+        )
+        self.glyt.addWidget(self.btn_primary_next)
 
 
 if __name__ == "__main__":

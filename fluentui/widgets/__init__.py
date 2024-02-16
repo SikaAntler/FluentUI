@@ -1,4 +1,4 @@
-from .button import FPushButton
+from .button import FPushButton, PrimaryPushButton
 from .dialog import FDialog
 from .line_edit import FLineEdit, FPlainTextEdit, FTextEdit
 from .list_view import FListWidget

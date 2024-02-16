@@ -35,26 +35,26 @@ ToolButton {
     padding: 5px 9px 6px 8px;
 }
 
-ToolButton:checked {
+PrimaryPushButton, ToolButton:checked {
     color: white;
     background-color: rgb(0, 159, 170);
     border: 1px solid rgb(0, 167, 179);
     border-bottom: 1px solid rgb(0, 119, 128);
 }
 
-ToolButton:checked:hover {
+PrimaryPushButton:hover, ToolButton:checked:hover {
     background-color: rgb(0, 167, 179);
     border: 1px solid rgb(45, 170, 179);
     border-bottom: 1px solid rgb(0, 119, 128);
 }
 
-ToolButton:checked:pressed {
+PrimaryPushButton:pressed, ToolButton:checked:pressed {
     color: rgba(255, 255, 255, 0.63);
     background-color: rgb(62, 171, 179);
     border: 1px solid rgb(62, 171, 179);
 }
 
-ToolButton:checked:disabled {
+PrimaryPushButton:disabled, ToolButton:checked:disabled {
     color: rgba(255, 255, 255, 0.9);
     background-color: rgb(205, 205, 205);
     border: 1px solid rgb(205, 205, 205);
