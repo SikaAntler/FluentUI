@@ -59,30 +59,29 @@ class FMessageBox(FramelessDialog):
 
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
-        self.setLayout(QVBoxLayout())
-        self.layout().setContentsMargins(12, 10, 12, 20)
-        self.layout().setSpacing(0)
+        self._hlyt = QHBoxLayout(self)
+        self._hlyt.setContentsMargins(12, 10, 12, 20)
+        self._hlyt.setSpacing(0)
 
         self.widget = QWidget(self)
         self.widget.setObjectName("widget")
-        self.layout().addWidget(self.widget)
+        self._hlyt.addWidget(self.widget)
 
         self._set_shadow_effect()
 
-        self.vlyt = QVBoxLayout(self)
+        self.vlyt = QVBoxLayout(self.widget)
         self.vlyt.setContentsMargins(1, 1, 1, 1)
         self.vlyt.setSpacing(0)
-        self.widget.setLayout(self.vlyt)
 
         self.widget_contents = QWidget(self)
-        self.glyt_content = QGridLayout(self)
+        self.glyt_content = QGridLayout(self.widget_contents)
         self.lbl_icon = MessageIcon(icon, self, fill)
         self.lbl_title = QLabel(title, self)
         self.lbl_text = QLabel(text, self)
         self._init_content()
 
         self.widget_buttons = QWidget(self)
-        self.hlyt_buttons = QHBoxLayout(self)
+        self.hlyt_buttons = QHBoxLayout(self.widget_buttons)
         self.btn_accept = PrimaryPushButton("确认", self)
         self.btn_reject = FPushButton("取消", self)
         self._init_buttons()
@@ -111,7 +110,6 @@ class FMessageBox(FramelessDialog):
 
         self.glyt_content.setContentsMargins(12, 12, 12, 12)
         self.glyt_content.setSpacing(12)
-        self.widget_contents.setLayout(self.glyt_content)
 
         self.lbl_icon.setFixedSize(48, 48)
         self.glyt_content.addWidget(
@@ -135,7 +133,6 @@ class FMessageBox(FramelessDialog):
 
         self.hlyt_buttons.setContentsMargins(12, 12, 12, 12)
         self.hlyt_buttons.setSpacing(12)
-        self.widget_buttons.setLayout(self.hlyt_buttons)
 
         self.hlyt_buttons.addWidget(self.btn_accept)
         self.hlyt_buttons.addWidget(self.btn_reject)
