@@ -24,6 +24,7 @@
         <file alias="dismiss">icons/ic_fluent_dismiss_24_regular.svg</file>
         <file alias="draw_text">icons/ic_fluent_draw_text_24_regular.svg</file>
         <file alias="edit">icons/ic_fluent_edit_24_regular.svg</file>
+        <file alias="error_circle">icons/ic_fluent_error_circle_24_regular.svg</file>
         <file alias="folder">icons/ic_fluent_folder_24_regular.svg</file>
         <file alias="folder_open">icons/ic_fluent_folder_open_24_regular.svg</file>
         <file alias="group_list">icons/ic_fluent_group_list_24_regular.svg</file>
@@ -31,9 +32,11 @@
         <file alias="image">icons/ic_fluent_image_24_regular.svg</file>
         <file alias="image_multiple">icons/ic_fluent_image_multiple_24_regular.svg</file>
         <file alias="image_search">icons/ic_fluent_image_search_24_regular.svg</file>
+        <file alias="info">icons/ic_fluent_info_24_regular.svg</file>
         <file alias="lightbulb">icons/ic_fluent_lightbulb_24_regular.svg</file>
         <file alias="line_horizontal_3">icons/ic_fluent_line_horizontal_3_20_regular.svg</file>
         <file alias="open_folder">icons/ic_fluent_open_folder_24_regular.svg</file>
+        <file alias="question_circle">icons/ic_fluent_question_circle_24_regular.svg</file>
         <file alias="rename">icons/ic_fluent_rename_24_regular.svg</file>
         <file alias="save">icons/ic_fluent_save_24_regular.svg</file>
         <file alias="scale_fit">icons/ic_fluent_scale_fit_24_regular.svg</file>
@@ -43,11 +46,13 @@
         <file alias="settings">icons/ic_fluent_settings_24_regular.svg</file>
         <file alias="square">icons/ic_fluent_square_24_regular.svg</file>
         <file alias="text">icons/ic_fluent_text_32_regular.svg</file>
+        <file alias="warning">icons/ic_fluent_warning_24_regular.svg</file>
         <file alias="zoom_fit">icons/ic_fluent_zoom_fit_24_regular.svg</file>
         <file alias="zoom_in">icons/ic_fluent_zoom_in_24_regular.svg</file>
         <file alias="zoom_out">icons/ic_fluent_zoom_out_24_regular.svg</file>
 
         <file>qss/button.qss</file>
+        <file>qss/dialog.qss</file>
         <file>qss/line_edit.qss</file>
         <!--        <file>qss/group_box.qss</file>-->
         <file>qss/list_view.qss</file>

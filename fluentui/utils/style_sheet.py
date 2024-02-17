@@ -22,6 +22,7 @@ class StyleSheet:
 
 class FStyleSheet(StyleSheet, Enum):
     BUTTON = "button"
+    DIALOG = "dialog"
     LINE_EDIT = "line_edit"
     GROUP_BOX = "group_box"
     LIST_VIEW = "list_view"

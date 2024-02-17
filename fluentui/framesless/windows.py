@@ -108,6 +108,8 @@ class WindowsFrameDialog(FramelessHelper, QDialog):
 
         self.update_frameless()
 
+        self._enable_resize = False
+
         self.title_bar.btn_minimize.hide()
         self.title_bar.btn_maximize.hide()
         self.title_bar.setDoubleClickedEnabled(False)
