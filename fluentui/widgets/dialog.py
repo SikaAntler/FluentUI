@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (
 )
 
 from ..framesless import FramelessDialog
-from ..utils import FIcon, FStyleSheet, Icon, draw_icon, set_font
+from ..utils import FIcon, FluentColor, FStyleSheet, Icon, draw_icon, set_font
 from ..widgets import FPushButton, PrimaryPushButton
 
 
@@ -139,16 +139,27 @@ class FMessageBox(FramelessDialog):
 
     @classmethod
     def question(cls, parent, title: str, text: str) -> "FMessageBox":
-        return cls(FIcon.QUESTION_CIRCLE, title, text, parent, "#30a75b", True)
+        return cls(
+            FIcon.QUESTION_CIRCLE,
+            title,
+            text,
+            parent,
+            FluentColor.MINT_LIGHT.value,
+            True,
+        )
 
     @classmethod
     def information(cls, parent, title: str, text: str) -> "FMessageBox":
-        return cls(FIcon.INFO, title, text, parent, "#0b7ad4", True)
+        return cls(FIcon.INFO, title, text, parent, FluentColor.COOL_BLUR.value, True)
 
     @classmethod
     def warning(cls, parent, title: str, text: str) -> "FMessageBox":
-        return cls(FIcon.WARNING, title, text, parent, "#f78a4c", True)
+        return cls(
+            FIcon.WARNING, title, text, parent, FluentColor.ORANGE_BRIGHT.value, True
+        )
 
     @classmethod
     def critical(cls, parent, title: str, text: str) -> "FMessageBox":
-        return cls(FIcon.ERROR_CIRCLE, title, text, parent, "#f14d85", True)
+        return cls(
+            FIcon.ERROR_CIRCLE, title, text, parent, FluentColor.MOD_RED.value, True
+        )

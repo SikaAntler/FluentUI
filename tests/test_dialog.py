@@ -81,11 +81,16 @@ class MainWindow(FramelessMainWindow):
             print("Qt dialog rejected")
 
     def on_btn_mb_fluent_clicked(self) -> None:
-        # box = FMessageBox(FIcon.QUESTION_CIRCLE.icon(), title, text, self)
-        # box.exec()
         FMessageBox.question(self, self.question_title, self.question_text)
         FMessageBox.information(self, self.information_title, self.information_text)
-        FMessageBox.warning(self, self.warning_title, self.warning_text)
+        box = FMessageBox(
+            FIcon.WARNING,
+            self.warning_title,
+            self.warning_text,
+            self,
+            "#f78a4c",
+        )
+        box.exec()
         FMessageBox.critical(self, self.critical_title, self.critical_text)
 
 
