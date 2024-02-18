@@ -12,6 +12,7 @@ from .navigation import (
     NavigationWidget,
     PanelPosition,
 )
+from .progress_bar import FProgressBar, IndeterminateProgressBar
 from .radio_button import FRadioButton
 from .scroll_bar import FScrollBar, FSmoothScrollBar
 from .setting_card import (
