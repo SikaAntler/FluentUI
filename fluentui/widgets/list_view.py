@@ -1,3 +1,5 @@
+import platform
+
 from PySide6.QtCore import QEvent, QModelIndex, Qt
 from PySide6.QtGui import QKeyEvent, QMouseEvent, QPainter, QResizeEvent
 from PySide6.QtWidgets import (
@@ -8,7 +10,7 @@ from PySide6.QtWidgets import (
 )
 
 from ..utils import FStyleSheet, ThemeColor, set_font
-from .scroll_bar import FSmoothScrollBar
+from .scroll_bar import FScrollBar, FSmoothScrollBar
 from .table_view import TableItemDelegate
 
 
@@ -37,8 +39,12 @@ class FListWidget(QListWidget):
         self._delegate = ListItemDelegate(self)
         self.setItemDelegate(self._delegate)
 
-        self.scroll_bar_v = FSmoothScrollBar(Qt.Orientation.Vertical, self)
-        self.scroll_bar_h = FSmoothScrollBar(Qt.Orientation.Horizontal, self)
+        if platform.system() == 'Windows':
+            self.scroll_bar_v = FSmoothScrollBar(Qt.Orientation.Vertical, self)
+            self.scroll_bar_h = FSmoothScrollBar(Qt.Orientation.Horizontal, self)
+        else:
+            self.scroll_bar_v = FScrollBar(Qt.Orientation.Vertical, self)
+            self.scroll_bar_h = FScrollBar(Qt.Orientation.Horizontal, self)
 
         self._is_select_right_clicked_row = False
 

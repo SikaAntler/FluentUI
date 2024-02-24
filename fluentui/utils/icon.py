@@ -78,6 +78,7 @@ class FIcon(Icon, Enum):
     INFO = "info"
     LIGHTBULB = "lightbulb"
     LINE_HORIZONTAL_3 = "line_horizontal_3"
+    MAXIMIZE = "maximize"
     OPEN_FOLDER = "open_folder"
     QUESTION_CIRCLE = "question_circle"
     RENAME = "rename"

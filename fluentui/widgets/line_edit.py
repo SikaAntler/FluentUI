@@ -86,6 +86,8 @@ class FLineEdit(QLineEdit):
         self.btn_clear.clicked.connect(self.clear)
         self.textChanged.connect(self.on_text_changed)
 
+        # TODO: 输入中文的时候会出现整体高度上升的问题
+
     def isClearButtonEnabled(self) -> bool:
         return self._clear_button_enable
 

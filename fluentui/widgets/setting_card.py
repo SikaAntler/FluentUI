@@ -46,27 +46,27 @@ class SettingCard(QWidget):
         self.hlyt.setSpacing(0)
         self.hlyt.setAlignment(Qt.AlignmentFlag.AlignVCenter)
 
-        self.vlyt = QVBoxLayout(self)
-        self.vlyt.setContentsMargins(0, 0, 0, 0)
-        self.vlyt.setSpacing(0)
-        self.vlyt.setAlignment(Qt.AlignmentFlag.AlignVCenter)
+        self.vlyt_text = QVBoxLayout()
+        self.vlyt_text.setContentsMargins(0, 0, 0, 0)
+        self.vlyt_text.setSpacing(0)
+        self.vlyt_text.setAlignment(Qt.AlignmentFlag.AlignVCenter)
 
         self.lbl_icon = SettingIcon(icon, self)
         self.lbl_icon.setFixedSize(20, 20)
         self.hlyt.addWidget(self.lbl_icon, 0, Qt.AlignmentFlag.AlignLeft)
         self.hlyt.addSpacing(16)
 
-        self.hlyt.addLayout(self.vlyt)
+        self.hlyt.addLayout(self.vlyt_text, 0)
 
         self.lbl_title = QLabel(title, self)
         self.lbl_title.setObjectName("lbl_title")
         set_font(self.lbl_title)
-        self.vlyt.addWidget(self.lbl_title, 0, Qt.AlignmentFlag.AlignLeft)
+        self.vlyt_text.addWidget(self.lbl_title, 0, Qt.AlignmentFlag.AlignLeft)
 
         self.lbl_content = QLabel(content, self)
         self.lbl_content.setObjectName("lbl_content")
         set_font(self.lbl_content, font_size=9)
-        self.vlyt.addWidget(self.lbl_content, 0, Qt.AlignmentFlag.AlignLeft)
+        self.vlyt_text.addWidget(self.lbl_content, 0, Qt.AlignmentFlag.AlignLeft)
         if content == "":
             self.lbl_content.hide()
 
@@ -159,10 +159,13 @@ class SliderSettingCard(SettingCard):
         self.hlyt.addSpacing(6)
 
         self.slider = FSlider(Qt.Orientation.Horizontal, self)
+        self.slider.setMinimumWidth(268)
         self.hlyt.addWidget(self.slider, 0, Qt.AlignmentFlag.AlignRight)
         self.hlyt.addSpacing(16)
 
         self.slider.valueChanged.connect(self._on_slider_valueChanged)
+
+        # 拖动slider时左上角三按钮会闪烁出现再消失
 
     def value(self) -> int:
         return self.slider.value()
@@ -171,6 +174,15 @@ class SliderSettingCard(SettingCard):
         self.lbl_value.setNum(value)
         self.lbl_value.adjustSize()
         self.slider.setValue(value)
+
+    def setMinimum(self, minimum: int) -> None:
+        self.slider.setMinimum(minimum)
+
+    def setMaximum(self, maximum: int) -> None:
+        self.slider.setMaximum(maximum)
+
+    def setRange(self, minimum: int, maximum: int) -> None:
+        self.slider.setRange(minimum, maximum)
 
     def _on_slider_valueChanged(self, value: int) -> None:
         self.setValue(value)

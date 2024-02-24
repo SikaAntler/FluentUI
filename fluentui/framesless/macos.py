@@ -49,7 +49,7 @@ class FramelessHelper:
     #     self.setWindowFlags(window_type)
 
 
-class MacOSFramelessDialog(QDialog, FramelessHelper):
+class MacOSFramelessDialog(FramelessHelper, QDialog):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 

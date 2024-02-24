@@ -35,6 +35,7 @@
         <file alias="info">icons/ic_fluent_info_24_regular.svg</file>
         <file alias="lightbulb">icons/ic_fluent_lightbulb_24_regular.svg</file>
         <file alias="line_horizontal_3">icons/ic_fluent_line_horizontal_3_20_regular.svg</file>
+        <file alias="maximize">icons/ic_fluent_maximize_24_regular.svg</file>
         <file alias="open_folder">icons/ic_fluent_open_folder_24_regular.svg</file>
         <file alias="question_circle">icons/ic_fluent_question_circle_24_regular.svg</file>
         <file alias="rename">icons/ic_fluent_rename_24_regular.svg</file>
