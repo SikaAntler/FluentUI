@@ -2,7 +2,7 @@ import Cocoa
 import objc
 from PySide6.QtCore import QEvent
 from PySide6.QtGui import QPaintEvent, QResizeEvent
-from PySide6.QtWidgets import QMainWindow, QWidget, QDialog
+from PySide6.QtWidgets import QDialog, QMainWindow, QWidget
 
 from .title_bar import TitleBar
 
@@ -15,16 +15,24 @@ class FramelessHelper:
         self._ns_window = view.window()
         self._hide_system_title_bar()
 
-        self.setMouseTracking(True)
-
         self.title_bar = TitleBar(self)
 
+        self._enable_resize = True
+
     def changeEvent(self, event: QEvent) -> None:
-        if event.type() == QEvent.WindowStateChange:
+        if event.type() == QEvent.Type.WindowStateChange:
             self._hide_system_title_bar()
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.title_bar.resize(self.width(), self.title_bar.height())
+
+    # def showEvent(self, event: QShowEvent) -> None:
+    #     super().showEvent(event)
+    #     self._hide_system_title_bar()
+    #
+    # def closeEvent(self, event: QCloseEvent) -> None:
+    #     super().closeEvent(event)
+    #     self._hide_system_title_bar()
 
     def _hide_system_title_bar(self) -> None:
         self._ns_window.setStyleMask_(
