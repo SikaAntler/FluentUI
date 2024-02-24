@@ -4,6 +4,7 @@ from PySide6.QtWidgets import QWidget
 
 from ..utils import FAction, draw_icon, set_font
 from .button import ToolButton
+from .tool_tip import FToolTipFilter
 
 
 class FToolButton(ToolButton):
@@ -141,6 +142,7 @@ class FToolBar(QWidget):
 
         button = self._create_button(action)
         button.setToolTip(action.toolTip())
+        button.installEventFilter(FToolTipFilter(button))
         self._insert_widget_to_layout(len(self._widgets), button)
 
     def addSeparator(self) -> None:
