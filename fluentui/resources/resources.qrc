@@ -43,6 +43,8 @@
         <file alias="scale_fit">icons/ic_fluent_scale_fit_24_regular.svg</file>
         <file alias="scan_camera">icons/ic_fluent_scan_camera_24_regular.svg</file>
         <file alias="search">icons/ic_fluent_search_24_regular.svg</file>
+        <file alias="select_object">icons/ic_fluent_select_object_24_regular.svg</file>
+        <file alias="select_object_skew_dismiss">icons/ic_fluent_select_object_skew_dismiss_24_regular.svg</file>
         <file alias="serial_port">icons/ic_fluent_serial_port_24_regular.svg</file>
         <file alias="settings">icons/ic_fluent_settings_24_regular.svg</file>
         <file alias="square">icons/ic_fluent_square_24_regular.svg</file>

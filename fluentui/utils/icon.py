@@ -86,6 +86,8 @@ class FIcon(Icon, Enum):
     SCALE_FIT = "scale_fit"
     SCAN_CAMERA = "scan_camera"
     SEARCH = "search"
+    SELECT_OBJECT = "select_object"
+    SELECT_OBJECT_SKEW_DISMISS = "select_object_skew_dismiss"
     SERIAL_PORT = "serial_port"
     SETTINGS = "settings"
     SQUARE = "square"
